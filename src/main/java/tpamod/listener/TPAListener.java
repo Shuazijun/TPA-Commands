@@ -4,8 +4,11 @@ import tpamod.events.TPARequestEvent;
 import tpamod.events.TPAResponseEvent;
 import com.google.common.cache.*;
 import necesse.engine.GameEventListener;
+import necesse.engine.save.LoadData;
+import necesse.engine.save.SaveData;
 // import necesse.engine.GameLog;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 public class TPAListener {
@@ -16,6 +19,7 @@ public class TPAListener {
     public TPAListener() {
         this.requestListener = new TPARequestListener(this);
         this.responseListener = new TPAResponseListener(this);
+        loadConfig(); // 加载保存的配置
         rebuildCache();
     }
     private Cache<String, TPARequestEvent> requests;
@@ -27,10 +31,43 @@ public class TPAListener {
     public void setCooldownSeconds(int seconds) {
         this.cooldownSeconds = seconds;
         rebuildCache();
+        // 保存设置到配置文件
+        saveConfig();
     }
 
     public int getCooldownSeconds() {
         return cooldownSeconds;
+    }
+
+    // 保存配置到文件
+    private void saveConfig() {
+        try {
+            SaveData saveData = new SaveData("TPAConfig");
+            saveData.addInt("cooldownSeconds", cooldownSeconds);
+            File configFile = new File("config/tpamod/config.dat");
+            configFile.getParentFile().mkdirs(); // 确保目录存在
+            saveData.saveScript(configFile);
+        } catch (Exception e) {
+            System.out.println("TPA Commands: Failed to save config: " + e.getMessage());
+        }
+    }
+
+    // 从文件加载配置
+    private void loadConfig() {
+        try {
+            File configFile = new File("config/tpamod/config.dat");
+            if (configFile.exists()) {
+                LoadData loadData = new LoadData(configFile);
+                int savedCooldown = loadData.getInt("cooldownSeconds", 30);
+                if (savedCooldown >= 1 && savedCooldown <= 3600) {
+                    this.cooldownSeconds = savedCooldown;
+                    System.out.println("TPA Commands: Loaded cooldown time: " + savedCooldown + " seconds");
+                }
+            }
+        } catch (Exception e) {
+            // 配置文件不存在或读取失败，使用默认值
+            System.out.println("TPA Commands: Using default cooldown time (30 seconds)");
+        }
     }
 
     private void onRequest(TPARequestEvent request) {
