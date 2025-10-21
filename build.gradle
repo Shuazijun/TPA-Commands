@@ -1,0 +1,157 @@
+plugins {
+    id 'java'
+}
+
+// ===== Mod Info ===== //
+
+// 合并后的模组信息
+def modInfo = [
+    modID          : "shuazi.tpa.commands",
+    modName        : "TPA Commands",
+    modVersion     : "1.0",
+    gameVersion    : "1.0.1",
+    modDescription : "Add TPA command to the game",
+    author         : "Shuazi",
+    clientside     : false,
+    modDependencies         : [],
+    modOptionalDependencies : [],
+]
+
+// 设置游戏目录路径
+String gameDirectory = "F:\\SteamLibrary\\steamapps\\common\\Necesse"
+
+// ===== Dependencies ===== //
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly files("$gameDirectory/Necesse.jar")
+    compileOnly fileTree("$gameDirectory/lib/")
+    compileOnly fileTree("./mods/")
+    compileOnly group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
+    
+    // 包含必要的Guava依赖到模组JAR中
+    implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
+}
+
+// ===== Main Configuration ===== //
+
+// 检查游戏目录是否正确
+if (!file("$gameDirectory/Necesse.jar").exists()) {
+    throw new Exception("Could not find game install directory. Make sure it is correct in the build.gradle file.")
+}
+
+modInfo.each {entry -> project.ext[entry.key] = entry.value }
+def normalizedName = modInfo.modName.replaceAll('[^\\p{Alnum}()$\\[\\].]', "_")
+
+// JAR文件名称
+def jarName = "$normalizedName-${modInfo.gameVersion}-${modInfo.modVersion}"
+def buildLocation = "build/jar"
+
+sourceSets.main.output.resourcesDir = file("build/mod/resources/")
+sourceSets.main.java.destinationDirectory = file("build/mod/")
+
+group modInfo.modID
+version modInfo.modVersion
+setSourceCompatibility(JavaVersion.VERSION_17)
+setTargetCompatibility(JavaVersion.VERSION_17)
+
+compileJava.options.encoding = "UTF-8"
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:-options'
+}
+
+// ===== Tasks ===== //
+
+tasks.register('generateModInfo', JavaExec) {
+    group "necesse"
+    description "Creates the mod info file"
+
+    classpath = files("$gameDirectory/Necesse.jar")
+
+    main = "CreateModInfoFile"
+    args "-file", "build/mod/mod.info",
+            "-id", "${modInfo.modID}",
+            "-name", "${modInfo.modName}",
+            "-version", "${modInfo.modVersion}",
+            "-gameVersion", "${modInfo.gameVersion}",
+            "-description", "${modInfo.modDescription}",
+            "-author", "${modInfo.author}",
+            "-clientside", "${modInfo.clientside}",
+            "-dependencies", modInfo.modDependencies ? "[" + modInfo.modDependencies.join(", ") + "]" : "",
+            "-optionalDependencies", modInfo.modOptionalDependencies ? "[" + modInfo.modOptionalDependencies.join(", ") + "]" : ""
+}
+
+// 使编译也创建模组信息文件
+classes.dependsOn("generateModInfo")
+
+tasks.register('buildModJar', Jar) {
+    group "necesse"
+    description "Generates the mod jar into the build folder"
+    dependsOn "classes"
+
+    doFirst {
+        fileTree(dir: buildLocation).exclude("${jarName}.jar").each { file ->
+            delete file
+        }
+    }
+
+    // 添加模组输出
+    from "build/mod"
+    // 添加所有运行时依赖
+    from configurations.runtimeClasspath.files.collect { it.isDirectory() ? it : zipTree(it) }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    archiveFileName.set("${jarName}.jar")
+    destinationDirectory.set(file(buildLocation))
+}
+
+tasks.register('createAppID') {
+    group "necesse"
+    description "Creates steam_appid.txt file"
+
+    doLast {
+        file("steam_appid.txt").text = "1169040"
+    }
+}
+
+tasks.register('runClient', JavaExec) {
+    group "necesse"
+    description "Run client with current mod"
+    dependsOn "buildModJar", "createAppID"
+
+    classpath = files("$gameDirectory/Necesse.jar")
+
+    main = "StartSteamClient"
+    jvmArgs "-Xms512m", "-Xmx4G", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M"
+    args "-dev", "-mod \"${buildLocation}\""
+}
+
+tasks.register('runDevClient', JavaExec) {
+    group "necesse"
+    description "Run client with current mod"
+    dependsOn "buildModJar", "createAppID"
+
+    classpath = files("$gameDirectory/Necesse.jar")
+
+    main = "StartSteamClient"
+    jvmArgs "-Xms512m", "-Xmx4G", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M"
+    args "-dev 1", "-mod \"${buildLocation}\""
+}
+
+tasks.register('runServer', JavaExec) {
+    group "necesse"
+    description "Run server with current mod"
+    dependsOn "buildModJar"
+
+    classpath = files("$gameDirectory/Server.jar")
+
+    main = "StartDesktopServer"
+    jvmArgs "-Xms512m", "-Xmx4G", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M"
+    args "-mod \"${buildLocation}\""
+}

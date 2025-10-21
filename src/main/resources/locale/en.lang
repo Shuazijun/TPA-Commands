@@ -1,0 +1,9 @@
+# TPA Commands Mod - English Localization
+
+# Commands
+command.tpa=Request to teleport to another player
+command.tpac=Accept teleport request
+command.tpad=Reject teleport request
+command.传送请求=Request to teleport to another player
+command.同意传送=Accept teleport request
+command.拒绝传送=Reject teleport request

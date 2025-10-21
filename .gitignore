@@ -1,0 +1,28 @@
+# Gradle
+.gradle/
+build/
+out/
+bin/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Game
+steam_appid.txt
+mods/
+
+# Logs
+logs/
+*.log
+
+# Temp files
+*.tmp
+*.temp
