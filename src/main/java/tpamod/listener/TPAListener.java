@@ -11,12 +11,27 @@ import java.util.concurrent.TimeUnit;
 public class TPAListener {
     private TPARequestListener requestListener;
     private TPAResponseListener responseListener;
+    private int cooldownSeconds = 30;
 
     public TPAListener() {
         this.requestListener = new TPARequestListener(this);
         this.responseListener = new TPAResponseListener(this);
+        rebuildCache();
     }
-    private Cache<String, TPARequestEvent> requests = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.SECONDS).build();
+    private Cache<String, TPARequestEvent> requests;
+
+    private void rebuildCache() {
+        this.requests = CacheBuilder.newBuilder().expireAfterWrite(cooldownSeconds, TimeUnit.SECONDS).build();
+    }
+
+    public void setCooldownSeconds(int seconds) {
+        this.cooldownSeconds = seconds;
+        rebuildCache();
+    }
+
+    public int getCooldownSeconds() {
+        return cooldownSeconds;
+    }
 
     private void onRequest(TPARequestEvent request) {
         if (requests.getIfPresent(request.target.getName()) == null) {

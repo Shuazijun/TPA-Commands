@@ -3,6 +3,7 @@ package tpamod;
 import tpamod.commands.TPACommand;
 import tpamod.commands.TPAcCommand;
 import tpamod.commands.TPAdCommand;
+import tpamod.commands.TPAcdCommand;
 import tpamod.events.TPARequestEvent;
 import tpamod.events.TPAResponseEvent;
 import tpamod.listener.TPAListener;
@@ -12,6 +13,7 @@ import necesse.engine.modLoader.annotations.ModEntry;
 
 @ModEntry
 public class TPAMod {
+    private TPAListener listener;
 
     public void preInit() {
         // 预初始化代码可以放在这里
@@ -21,7 +23,7 @@ public class TPAMod {
         System.out.println("TPA Commands Mod initialized!");
 
         // 初始化传送系统监听器
-        TPAListener listener = new TPAListener();
+        listener = new TPAListener();
         GameEvents.addListener(TPARequestEvent.class, listener.getRequestListener());
         GameEvents.addListener(TPAResponseEvent.class, listener.getResponseListener());
         
@@ -32,6 +34,10 @@ public class TPAMod {
         CommandsManager.registerServerCommand(new TPACommand("传送请求"));
         CommandsManager.registerServerCommand(new TPAcCommand("同意传送"));
         CommandsManager.registerServerCommand(new TPAdCommand("拒绝传送"));
+        
+        // 注册管理命令
+        CommandsManager.registerServerCommand(new TPAcdCommand("tpacd", listener));
+        CommandsManager.registerServerCommand(new TPAcdCommand("设置传送冷却时间", listener));
     }
 
     public void initResources() {
