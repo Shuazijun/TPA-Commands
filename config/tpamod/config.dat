@@ -1,0 +1,3 @@
+TPAConfig = {
+	cooldownSeconds = 100
+}

@@ -28,10 +28,10 @@ public class TPAMod {
         GameEvents.addListener(TPAResponseEvent.class, listener.getResponseListener());
         
         // 注册传送命令
-        CommandsManager.registerServerCommand(new TPACommand("tpa"));
+        CommandsManager.registerServerCommand(new TPACommand("tpa", listener));
         CommandsManager.registerServerCommand(new TPAcCommand("tpac"));
         CommandsManager.registerServerCommand(new TPAdCommand("tpad"));
-        CommandsManager.registerServerCommand(new TPACommand("传送请求"));
+        CommandsManager.registerServerCommand(new TPACommand("传送请求", listener));
         CommandsManager.registerServerCommand(new TPAcCommand("同意传送"));
         CommandsManager.registerServerCommand(new TPAdCommand("拒绝传送"));
         

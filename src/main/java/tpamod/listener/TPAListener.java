@@ -71,15 +71,23 @@ public class TPAListener {
     }
 
     private void onRequest(TPARequestEvent request) {
-        if (requests.getIfPresent(request.target.getName()) == null) {
-            requests.put(request.target.getName(), request);
+        // 使用"发送者->接收者"作为缓存键，确保每个玩家的冷却时间独立
+        String cacheKey = getCacheKey(request.source.getName(), request.target.getName());
+        if (requests.getIfPresent(cacheKey) == null) {
+            requests.put(cacheKey, request);
             return;
         }
         request.preventDefault();
     }
 
+    // 生成缓存键：发送者->接收者
+    private String getCacheKey(String sourceName, String targetName) {
+        return sourceName + "->" + targetName;
+    }
+
     private void onResponse(TPAResponseEvent response) {
-        TPARequestEvent request = requests.getIfPresent(response.teleportTarget.getName());
+        // 查找所有以当前玩家为目标的请求
+        TPARequestEvent request = findRequestByTarget(response.teleportTarget.getName());
         if(request == null) {
             response.preventDefault();
             return;
@@ -89,7 +97,20 @@ public class TPAListener {
         } else {
             request.reject();
         }
-        requests.invalidate(response.teleportTarget.getName());
+        // 使用正确的缓存键来移除请求
+        String cacheKey = getCacheKey(request.source.getName(), request.target.getName());
+        requests.invalidate(cacheKey);
+    }
+
+    // 根据目标玩家查找请求
+    private TPARequestEvent findRequestByTarget(String targetName) {
+        // 遍历缓存查找以该玩家为目标的请求
+        for (String key : requests.asMap().keySet()) {
+            if (key.endsWith("->" + targetName)) {
+                return requests.getIfPresent(key);
+            }
+        }
+        return null;
     }
 
     public GameEventListener<TPARequestEvent> getRequestListener() {
