@@ -1,0 +1,66 @@
+TPA Commands Mod
+
+A comprehensive teleportation system for Necesse that adds player-to-player teleportation, warp points, and position management features.
+
+Features:
+
+Player Teleportation System
+- /tpa [player] - Request teleport to another player
+- /tpac - Accept teleport request
+- /tpad - Deny teleport request
+- /传送请求 [player] - Request teleport to another player (Chinese command)
+- /同意传送 - Accept teleport request (Chinese command)
+- /拒绝传送 - Deny teleport request (Chinese command)
+- Cooldown protection - Prevents spam (15 seconds default)
+
+Warp System
+- /newwarp [name] - Create warp points (admin)
+- /delwarp [name] - Delete warp points (admin)
+- /warp [name] - Teleport to warp points
+- /warplist - List all available warp points
+- /新建传送点 [name] - Create warp points (admin, Chinese command)
+- /删除传送点 [name] - Delete warp points (admin, Chinese command)
+- /传送点 [name] - Teleport to warp points (Chinese command)
+- /传送点列表 - List all warp points (Chinese command)
+- Preset names: home, spawn, town, base
+
+Back System
+- /back - Return to previous position
+- /返回 - Return to previous position (Chinese command)
+- Priority system: Death location > Teleport location
+- Cooldown protection - 15 seconds default
+
+Position Management
+- /getpos [player] - Get player coordinates (admins can query other players)
+- /tppos [x] [y] [player] - Teleport to specified coordinates (admin)
+- /获取坐标 [player] - Get player coordinates (Chinese command)
+- /传送坐标 [x] [y] [player] - Teleport to specified coordinates (admin, Chinese command)
+
+Configuration Commands
+- /tpacd [seconds] - Set TPA cooldown time (admin)
+- /warpcd [seconds] - Set warp cooldown time (admin)
+- /backcd [seconds] - Set back cooldown time (admin)
+- /设置传送请求冷却时间 [seconds] - Set TPA cooldown time (admin, Chinese command)
+- /设置传送点冷却时间 [seconds] - Set warp cooldown time (admin, Chinese command)
+- /设置返回冷却时间 [seconds] - Set back cooldown time (admin, Chinese command)
+- Time range: 1-3600 seconds
+
+Key Benefits:
+✅ Easy to Use - Simple commands for all players
+✅ Admin Controls - Full configuration options
+✅ Cooldown Protection - Prevents abuse
+✅ Persistent Data - Warp points and settings saved automatically
+✅ Bilingual Support - English and Chinese commands
+✅ Server Compatible - Works on multiplayer servers
+
+Installation:
+1. Subscribe to this mod
+2. Enable in your server/world settings
+3. Enjoy enhanced teleportation features!
+
+Mod ID: shuazi.tpa.commands
+Version: 1.1
+Game Version: 1.0.1+
+Author: Shuazi
+
+For support or suggestions, visit GitHub repository: https://github.com/Shuazijun/TPA-Commands
