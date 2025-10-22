@@ -8,9 +8,9 @@ A mod that adds TPA commands to the Necesse game.
 
 - **Mod ID**: `shuazi.tpa.commands`
 - **Mod Name**: `TPA Commands`
-- **Mod Version**: `1.0`
+- **Mod Version**: `1.1`
 - **Target Game Version**: `1.0.1`
-- **Mod Description**: `Add TPA command to the game`
+- **Mod Description**: `Add TPA and Warp commands to the game`
 - **Author**: `Shuazi`
 - **Client Mode**: `false` (requires server support)
 
@@ -24,99 +24,103 @@ A mod that adds TPA commands to the Necesse game.
 - **/同意传送** - Accept teleport request (Chinese command)
 - **/拒绝传送** - Deny teleport request (Chinese command)
 
-## Development Environment
+### Back System (New in v1.1)
+- **/back** - Return to previous position (priority to death location, then teleport location)
+- **/backcd [seconds]** - Set back cooldown time (admin only, default 15 seconds)
+- **/返回** - Return to previous position (Chinese command)
+- **/设置返回冷却时间 [seconds]** - Set back cooldown time (admin only, Chinese command)
 
-### System Requirements
-- **Operating System**: Windows 11 (or other supported systems)
-- **Java Version**: Java 17 (required)
-- **Build Tool**: Gradle
-- **Project Type**: Necesse game mod
+### Warp System (New in v1.1)
+- **/newwarp [warpName]** - Create warp point at current location (admin only, supports preset names like home, spawn, town, base)
+- **/delwarp [warpName]** - Delete specified warp point (admin only)
+- **/warp [warpName]** - Teleport to specified warp point (default cooldown 15 seconds)
+- **/warplist** - List all available warp points
+- **/warpcd [seconds]** - Set warp point cooldown time (admin only, default 15 seconds)
+- **/新建传送点 [warpName]** - Create warp point at current location (admin only, Chinese command)
+- **/删除传送点 [warpName]** - Delete specified warp point (admin only, Chinese command)
+- **/传送点 [warpName]** - Teleport to specified warp point (Chinese command)
+- **/传送点列表** - List all available warp points (Chinese command)
+- **/设置传送点冷却时间 [seconds]** - Set warp point cooldown time (admin only, Chinese command)
 
-### Project Structure
-```
-TPA-Commands/
-├── build.gradle          # Project build configuration
-├── settings.gradle       # Project settings
-├── README.md             # Project documentation (Chinese)
-├── README_EN.md          # Project documentation (English)
-├── MOD_MIGRATION_GUIDE.md # Mod migration guide
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── tpamod/
-│       │       ├── TPAMod.java                  # Main mod class
-│       │       ├── commands/                    # Command classes
-│       │       │   ├── TPACommand.java
-│       │       │   ├── TPAcCommand.java
-│       │       │   └── TPAdCommand.java
-│       │       ├── events/                      # Event classes
-│       │       │   ├── TPARequestEvent.java
-│       │       │   └── TPAResponseEvent.java
-│       │       └── listener/                    # Listeners
-│       │           └── TPAListener.java
-│       └── resources/
-│           ├── locale/                          # Localization files
-│           │   ├── en.lang
-│           │   └── zh_cn.lang
-│           └── preview.png                      # Mod preview image
-```
+### Position Query and Teleportation
+- **/getpos [player name]** - Get player position (admins can query other players)
+- **/tppos [x] [y] [player name]** - Teleport to specified coordinates (admin only)
+- **/获取坐标 [player name]** - Get player position (admins can query other players, Chinese command)
+- **/传送坐标 [x] [y] [player name]** - Teleport to specified coordinates (admin only, Chinese command)
 
-## Building and Running
-
-### Gradle Build Commands
-
-#### Basic Build Commands
-```bash
-# Compile project
-./gradlew build
-
-# Clean build files
-./gradlew clean
-
-# Build mod JAR file
-./gradlew buildModJar
-```
-
-#### Necesse Mod Specific Commands
-```bash
-# Run client (with current mod)
-./gradlew runClient
-
-# Run development client (with debug mode)
-./gradlew runDevClient
-
-# Run server (with current mod)
-./gradlew runServer
-```
+### Teleportation System Management
+- **/tpacd [seconds]** - Set TPA request cooldown time (admin only, default 15 seconds)
+- **/设置传送请求冷却时间 [seconds]** - Set TPA request cooldown time (admin only, Chinese command)
 
 ## Usage Instructions
 
-### Teleport Commands
+### Back System
+**Admin Commands**:
+```
+/backcd [seconds] - Set back cooldown time (1-3600 seconds, default 15)
+/设置返回冷却时间 [seconds] - Set back cooldown time (Chinese command)
+```
+
+**Player Commands**:
+```
+/back - Return to previous position (priority to death location, then teleport location)
+/返回 - Return to previous position (Chinese command)
+```
+
+### Warp System
+**Admin Commands**:
+```
+/newwarp [warpName] - Create warp point at current location (supports preset names like home, spawn, town, base)
+/delwarp [warpName] - Delete specified warp point
+/warpcd [seconds] - Set warp point cooldown time (1-3600 seconds, default 15)
+/新建传送点 [warpName] - Create warp point at current location (Chinese command)
+/删除传送点 [warpName] - Delete specified warp point (Chinese command)
+/设置传送点冷却时间 [seconds] - Set warp point cooldown time (Chinese command)
+```
+
+**Player Commands**:
+```
+/warp [warpName] - Teleport to specified warp point (with cooldown, default 15 seconds)
+/warplist - List all available warp points
+/传送点 [warpName] - Teleport to specified warp point (Chinese command)
+/传送点列表 - List all available warp points (Chinese command)
+```
+
+### Position Query and Teleportation
+**Admin Commands**:
+```
+/getpos [player name] - Get player position (can query other players)
+/tppos [x] [y] [player name] - Teleport to specified coordinates
+/获取坐标 [player name] - Get player position (Chinese command)
+/传送坐标 [x] [y] [player name] - Teleport to specified coordinates (Chinese command)
+```
+
+**Player Commands**:
+```
+/getpos - Get own current position
+/获取坐标 - Get own current position (Chinese command)
+```
+
+### Teleportation System
 **Player-to-player teleportation**:
 ```
-/tpa [player name] - Send teleport request
+/tpa [player name] - Send teleport request (with cooldown, default 15 seconds)
 /tpac - Accept request
 /tpad - Deny request
+/tpacd [seconds] - Set TPA request cooldown time (admin only)
 /传送请求 [player name] - Send teleport request (Chinese command)
 /同意传送 - Accept request (Chinese command)
 /拒绝传送 - Deny request (Chinese command)
+/设置传送请求冷却时间 [seconds] - Set TPA request cooldown time (admin only, Chinese command)
 ```
 
-## Development Notes
+## Cooldown Configuration
+All teleportation-related features have cooldown protection, default set to 15 seconds:
+- TPA request cooldown: 15 seconds
+- Warp point usage cooldown: 15 seconds
+- Back command cooldown: 15 seconds
 
-### Technical Features
-- Built with Java 17 and Gradle build system
-- Complete teleport request/response system
-- Event-driven architecture
-- Cache mechanism to prevent duplicate requests
-- Multi-language localization support
-
-### Code Structure
-- **commands**: All chat command implementations
-- **events**: Custom game events
-- **listener**: Event listeners
-- **data**: Data transfer objects
-- **staticmethods**: Utility methods
+Admins can adjust cooldown times using the respective configuration commands (1-3600 seconds).
 
 ## License
 

@@ -1,0 +1,33 @@
+# TPA Commands Mod - 中文本地化
+
+# 命令
+command.tpa=请求传送到另一个玩家
+command.tpac=接受传送请求
+command.tpad=拒绝传送请求
+command.tpacd=设置TPA请求冷却时间（秒）
+command.传送请求=请求传送到另一个玩家
+command.同意传送=接受传送请求
+command.拒绝传送=拒绝传送请求
+command.设置传送请求冷却时间=设置TPA请求冷却时间（秒）
+command.getpos=获取玩家坐标（管理员可查询其他玩家）
+command.获取坐标=获取玩家坐标（管理员可查询其他玩家）
+command.tppos=传送到指定坐标 [x坐标] [y坐标] [玩家名]（管理员专用）
+command.传送坐标=传送到指定坐标 [x坐标] [y坐标] [玩家名]（管理员专用）
+
+# 传送点系统命令
+command.newwarp=在当前位置创建传送点 [传送点名称]（管理员专用）
+command.新建传送点=在当前位置创建传送点 [传送点名称]（管理员专用）
+command.delwarp=删除指定传送点 [传送点名称]（管理员专用）
+command.删除传送点=删除指定传送点 [传送点名称]（管理员专用）
+command.warp=传送到指定传送点 [传送点名称]
+command.传送点=传送到指定传送点 [传送点名称]
+command.warplist=查看所有可用传送点列表
+command.传送点列表=查看所有可用传送点列表
+command.warpcd=设置传送点冷却时间 [秒数]（管理员专用）
+command.设置传送点冷却时间=设置传送点冷却时间 [秒数]（管理员专用）
+
+# 返回系统命令
+command.back=返回上一个坐标点（死亡或传送前位置）
+command.返回=返回上一个坐标点（死亡或传送前位置）
+command.backcd=设置返回冷却时间 [秒数]（管理员专用）
+command.设置返回冷却时间=设置返回冷却时间 [秒数]（管理员专用）

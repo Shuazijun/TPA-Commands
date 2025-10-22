@@ -1,0 +1,17 @@
+BackData = {
+	PlayerBack = {
+		auth = 1,
+		teleportIslandX = 0,
+		teleportIslandY = 0,
+		teleportDimension = 0,
+		teleportX = -7107,
+		teleportY = 25002,
+		deathIslandX = 0,
+		deathIslandY = 0,
+		deathDimension = 0,
+		deathX = 0,
+		deathY = 0,
+		hasDeathRecord = false,
+		hasTeleportRecord = true
+	}
+}

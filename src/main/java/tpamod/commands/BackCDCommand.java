@@ -1,5 +1,7 @@
 package tpamod.commands;
 
+import tpamod.data.BackConfig;
+import necesse.engine.commands.CmdParameter;
 import necesse.engine.commands.CommandLog;
 import necesse.engine.commands.ModularChatCommand;
 import necesse.engine.commands.PermissionLevel;
@@ -7,15 +9,14 @@ import necesse.engine.commands.parameterHandlers.IntParameterHandler;
 import necesse.engine.network.client.Client;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
-import tpamod.listener.TPAListener;
 
-public class TPAcdCommand extends ModularChatCommand {
-    private final TPAListener listener;
+public class BackCDCommand extends ModularChatCommand {
+    private final BackConfig backConfig;
 
-    public TPAcdCommand(String name, TPAListener listener) {
-        super(name, "设置传送请求冷却时间（秒）", PermissionLevel.ADMIN, false,
-              new necesse.engine.commands.CmdParameter("seconds", new IntParameterHandler()));
-        this.listener = listener;
+    public BackCDCommand(String name, BackConfig backConfig) {
+        super(name, "设置返回冷却时间（秒）", PermissionLevel.ADMIN, false,
+              new CmdParameter("seconds", new IntParameterHandler()));
+        this.backConfig = backConfig;
     }
 
     public void runModular(Client client, Server server, ServerClient serverClient, Object[] args, String[] errors, CommandLog logs) {
@@ -28,8 +29,8 @@ public class TPAcdCommand extends ModularChatCommand {
             logs.add("冷却时间不能超过3600秒（1小时）");
             return;
         }
-        listener.setCooldownSeconds(seconds);
-        logs.add("传送请求冷却时间已设置为 " + seconds + " 秒");
+        backConfig.setCooldownSeconds(seconds);
+        logs.add("返回冷却时间已设置为 " + seconds + " 秒");
     }
 
     public boolean shouldBeListed() {

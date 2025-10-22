@@ -9,3 +9,25 @@ command.传送请求=Request to teleport to another player
 command.同意传送=Accept teleport request
 command.拒绝传送=Reject teleport request
 command.设置传送冷却时间=Set TPA request cooldown time (seconds)
+command.getpos=Get player position (admins can query other players)
+command.获取坐标=Get player position (admins can query other players)
+command.tppos=Teleport to specified coordinates [x] [y] [player] (admin only)
+command.传送坐标=Teleport to specified coordinates [x] [y] [player] (admin only)
+
+# Warp System Commands
+command.newwarp=Create warp point at current location [warpName] (admin only)
+command.新建传送点=Create warp point at current location [warpName] (admin only)
+command.delwarp=Delete specified warp point [warpName] (admin only)
+command.删除传送点=Delete specified warp point [warpName] (admin only)
+command.warp=Teleport to specified warp point [warpName]
+command.传送=Teleport to specified warp point [warpName]
+command.warplist=List all available warp points
+command.传送列表=List all available warp points
+command.warpcd=Set warp point cooldown time [seconds] (admin only)
+command.设置传送点冷却时间=Set warp point cooldown time [seconds] (admin only)
+
+# Back System Commands
+command.back=Return to previous position (death or teleport location)
+command.返回=Return to previous position (death or teleport location)
+command.backcd=Set back cooldown time [seconds] (admin only)
+command.设置返回冷却时间=Set back cooldown time [seconds] (admin only)

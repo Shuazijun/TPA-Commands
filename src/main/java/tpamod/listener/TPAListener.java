@@ -44,7 +44,7 @@ public class TPAListener {
         try {
             SaveData saveData = new SaveData("TPAConfig");
             saveData.addInt("cooldownSeconds", cooldownSeconds);
-            File configFile = new File("config/tpamod/config.dat");
+            File configFile = new File("config/tpamod/tpaconfig.dat");
             configFile.getParentFile().mkdirs(); // 确保目录存在
             saveData.saveScript(configFile);
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class TPAListener {
     // 从文件加载配置
     private void loadConfig() {
         try {
-            File configFile = new File("config/tpamod/config.dat");
+            File configFile = new File("config/tpamod/tpaconfig.dat");
             if (configFile.exists()) {
                 LoadData loadData = new LoadData(configFile);
                 int savedCooldown = loadData.getInt("cooldownSeconds", 30);
