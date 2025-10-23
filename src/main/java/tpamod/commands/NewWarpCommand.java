@@ -1,14 +1,13 @@
 package tpamod.commands;
 
 import tpamod.data.WarpData;
-import necesse.engine.commands.CmdParameter;
-import necesse.engine.commands.CommandLog;
-import necesse.engine.commands.ModularChatCommand;
-import necesse.engine.commands.PermissionLevel;
+import necesse.engine.commands.*;
 import necesse.engine.commands.parameterHandlers.PresetStringParameterHandler;
 import necesse.engine.network.client.Client;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
+// import necesse.engine.util.LevelIdentifier;
+// import necesse.entity.mobs.PlayerMob;
 
 public class NewWarpCommand extends ModularChatCommand {
     private final WarpData warpData;
@@ -26,15 +25,13 @@ public class NewWarpCommand extends ModularChatCommand {
             // 获取玩家当前位置
             float playerX = serverClient.playerMob.getX();
             float playerY = serverClient.playerMob.getY();
-            // 使用默认值，因为API可能已更改
-            int islandX = 0;
-            int islandY = 0;
-            int dimension = 0;
+            // 获取当前关卡标识符
+            String currentLevelIdentifier = serverClient.playerMob.getLevel().getIdentifier().toString();
             
             // 创建传送点
-            if (warpData.addWarpPoint(warpName, islandX, islandY, dimension, playerX, playerY)) {
+            if (warpData.addWarpPoint(warpName, 0, 0, currentLevelIdentifier, playerX, playerY)) {
                 logs.add("传送点 '" + warpName + "' 已创建");
-                logs.add("位置: 岛屿(" + islandX + ", " + islandY + ") 维度(" + dimension + ") 坐标(" + String.format("%.2f", playerX) + ", " + String.format("%.2f", playerY) + ")");
+                logs.add("位置: 关卡(" + currentLevelIdentifier + ") 坐标(" + String.format("%.2f", playerX) + ", " + String.format("%.2f", playerY) + ")");
             } else {
                 logs.add("传送点 '" + warpName + "' 已存在");
             }

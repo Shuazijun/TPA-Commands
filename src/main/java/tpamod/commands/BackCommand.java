@@ -9,6 +9,7 @@ import necesse.engine.commands.PermissionLevel;
 import necesse.engine.network.client.Client;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
+import necesse.engine.util.LevelIdentifier;
 import necesse.entity.mobs.PlayerMob;
 
 public class BackCommand extends ModularChatCommand {
@@ -38,11 +39,12 @@ public class BackCommand extends ModularChatCommand {
         // 获取玩家的坐标记录
         BackData.PlayerBackData playerData = backData.getPlayerBackData(playerAuth);
         
+        
         // 优先返回死亡坐标，如果没有死亡记录则返回传送坐标
         if (playerData.hasDeathRecord) {
             // 返回死亡坐标
-            teleportPlayer(serverClient, 
-                playerData.lastDeathIslandX, playerData.lastDeathIslandY, 
+            teleportPlayer(serverClient,
+                playerData.lastDeathIslandX, playerData.lastDeathIslandY,
                 playerData.lastDeathDimension, playerData.lastDeathX, playerData.lastDeathY, logs);
             
             // 清除死亡记录
@@ -51,8 +53,8 @@ public class BackCommand extends ModularChatCommand {
             
         } else if (playerData.hasTeleportRecord) {
             // 返回传送坐标
-            teleportPlayer(serverClient, 
-                playerData.lastTeleportIslandX, playerData.lastTeleportIslandY, 
+            teleportPlayer(serverClient,
+                playerData.lastTeleportIslandX, playerData.lastTeleportIslandY,
                 playerData.lastTeleportDimension, playerData.lastTeleportX, playerData.lastTeleportY, logs);
             
             // 清除传送记录
@@ -71,13 +73,40 @@ public class BackCommand extends ModularChatCommand {
     }
 
     // 传送玩家到指定坐标
-    private void teleportPlayer(ServerClient serverClient, int islandX, int islandY, int dimension, int x, int y, CommandLog logs) {
+    private void teleportPlayer(ServerClient serverClient, int islandX, int islandY, int levelType, int x, int y, CommandLog logs) {
         PlayerMob playerMob = serverClient.playerMob;
         if (playerMob != null) {
-            // 执行传送 - 简化版本，只设置位置
-            playerMob.setPos((float)x, (float)y, true);
-            
-            logs.add("坐标: (" + x + ", " + y + ") 岛屿: (" + islandX + ", " + islandY + ")");
+            // 检查是否需要切换关卡
+            int currentLevelType = getCurrentLevelType(playerMob);
+            if (currentLevelType != levelType) {
+                // 需要切换关卡
+                logs.add("正在切换关卡...");
+                logs.add("目标关卡: " + getLevelName(levelType) + " (当前关卡: " + getLevelName(currentLevelType) + ")");
+                
+                // 获取目标关卡的LevelIdentifier
+                LevelIdentifier targetLevelIdentifier = getLevelIdentifierFromType(levelType);
+                if (targetLevelIdentifier != null) {
+                    try {
+                        // 使用changeLevel API切换关卡并直接传送到目标位置
+                        serverClient.changeLevel(targetLevelIdentifier, level -> {
+                            return new java.awt.Point(x, y);
+                        }, true);
+                        logs.add("关卡切换成功");
+                        logs.add("已切换到关卡: " + getLevelName(levelType));
+                        logs.add("已传送到坐标: (" + x + ", " + y + ")");
+                    } catch (Exception e) {
+                        logs.add("关卡切换失败: " + e.getMessage());
+                        logs.add("请稍后重试");
+                    }
+                } else {
+                    logs.add("无法识别的目标关卡: " + levelType);
+                    logs.add("请使用 /setlevel 命令手动切换关卡");
+                }
+            } else {
+                // 在同一关卡内传送
+                playerMob.setPos((float)x, (float)y, true);
+                logs.add("坐标: (" + x + ", " + y + ") 关卡: " + getLevelName(levelType));
+            }
         } else {
             logs.add("玩家数据错误，传送失败");
         }
@@ -85,5 +114,66 @@ public class BackCommand extends ModularChatCommand {
 
     public boolean shouldBeListed() {
         return true;
+    }
+    
+    // 获取玩家当前关卡类型
+    private int getCurrentLevelType(PlayerMob playerMob) {
+        try {
+            // 使用LevelIdentifier获取关卡信息
+            LevelIdentifier levelIdentifier = playerMob.getLevel().getIdentifier();
+            String levelIdentifierString = levelIdentifier.toString();
+            
+            // 根据LevelIdentifier字符串判断关卡类型
+            if (levelIdentifierString.contains("flat")) {
+                return 2; // 平坦世界关卡
+            } else if (levelIdentifierString.contains("surface")) {
+                return 0; // 地表关卡
+            } else if (levelIdentifierString.contains("cave")) {
+                return 1; // 地下洞穴关卡
+            } else if (levelIdentifierString.contains("deepcave")) {
+                return 2; // 深层洞穴关卡
+            }
+            
+            // 如果无法识别，使用默认地表关卡
+            System.out.println("Back System: Unknown level identifier: " + levelIdentifierString + ", using default (0)");
+            return 0; // 默认关卡
+        } catch (Exception e) {
+            System.out.println("Back System: Failed to get level type, using default (0)");
+            return 0; // 默认关卡
+        }
+    }
+    
+    // 获取关卡名称
+    private String getLevelName(int levelType) {
+        switch (levelType) {
+            case 0:
+                return "地表 (0)";
+            case 1:
+                return "地下洞穴 (1)";
+            case 2:
+                return "深层洞穴 (2)";
+            default:
+                return "未知 (" + levelType + ")";
+        }
+    }
+    
+    // 根据关卡类型获取对应的LevelIdentifier
+    private LevelIdentifier getLevelIdentifierFromType(int levelType) {
+        try {
+            // 使用LevelIdentifier的字符串构造函数
+            switch (levelType) {
+                case 0: // 地表关卡
+                    return new LevelIdentifier("surface");
+                case 1: // 地下洞穴关卡
+                    return new LevelIdentifier("cave");
+                case 2: // 深层洞穴关卡/平坦世界关卡
+                    return new LevelIdentifier("deepcave");
+                default:
+                    return new LevelIdentifier("surface"); // 默认地表关卡
+            }
+        } catch (Exception e) {
+            System.out.println("Back System: Failed to create LevelIdentifier for level type " + levelType);
+            return new LevelIdentifier("surface"); // 默认地表关卡
+        }
     }
 }

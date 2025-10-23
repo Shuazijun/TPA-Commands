@@ -8,7 +8,7 @@ A mod that adds TPA commands to the Necesse game.
 
 - **Mod ID**: `shuazi.tpa.commands`
 - **Mod Name**: `TPA Commands`
-- **Mod Version**: `1.1`
+- **Mod Version**: `1.2`
 - **Target Game Version**: `1.0.1`
 - **Mod Description**: `Add TPA and Warp commands to the game`
 - **Author**: `Shuazi`
@@ -42,11 +42,11 @@ A mod that adds TPA commands to the Necesse game.
 - **/传送点列表** - List all available warp points (Chinese command)
 - **/设置传送点冷却时间 [seconds]** - Set warp point cooldown time (admin only, Chinese command)
 
-### Position Query and Teleportation
-- **/getpos [player name]** - Get player position (admins can query other players)
-- **/tppos [x] [y] [player name]** - Teleport to specified coordinates (admin only)
-- **/获取坐标 [player name]** - Get player position (admins can query other players, Chinese command)
-- **/传送坐标 [x] [y] [player name]** - Teleport to specified coordinates (admin only, Chinese command)
+### Position Query and Teleportation (Enhanced in v1.2)
+- **/getpos [player name]** - Get player position and level information (admins can query other players)
+- **/tppos [x] [y] [level identifier] [player name]** - Teleport to specified coordinates and level (admin only, supports cross-dimension teleportation)
+- **/获取坐标 [player name]** - Get player position and level information (admins can query other players, Chinese command)
+- **/传送坐标 [x] [y] [level identifier] [player name]** - Teleport to specified coordinates and level (admin only, Chinese command)
 
 ### Teleportation System Management
 - **/tpacd [seconds]** - Set TPA request cooldown time (admin only, default 15 seconds)
@@ -86,20 +86,33 @@ A mod that adds TPA commands to the Necesse game.
 /传送点列表 - List all available warp points (Chinese command)
 ```
 
-### Position Query and Teleportation
+### Position Query and Teleportation (New Cross-Dimension Features in v1.2)
 **Admin Commands**:
 ```
-/getpos [player name] - Get player position (can query other players)
-/tppos [x] [y] [player name] - Teleport to specified coordinates
-/获取坐标 [player name] - Get player position (Chinese command)
-/传送坐标 [x] [y] [player name] - Teleport to specified coordinates (Chinese command)
+/getpos [player name] - Get player position and level information (can query other players)
+/tppos [x] [y] [level identifier] - Teleport to specified coordinates and level
+/tppos [x] [y] [level identifier] [player name] - Teleport other player to specified coordinates and level
+/获取坐标 [player name] - Get player position and level information (Chinese command)
+/传送坐标 [x] [y] [level identifier] - Teleport to specified coordinates and level (Chinese command)
+/传送坐标 [x] [y] [level identifier] [player name] - Teleport other player to specified coordinates and level (Chinese command)
 ```
 
 **Player Commands**:
 ```
-/getpos - Get own current position
-/获取坐标 - Get own current position (Chinese command)
+/getpos - Get own current position and level information
+/获取坐标 - Get own current position and level information (Chinese command)
 ```
+
+### Cross-Dimension Teleportation (New in v1.2)
+Now supports true cross-dimension teleportation using level identifiers:
+```
+/tppos 100 200 surface - Teleport to surface coordinates (100,200)
+/tppos 300 400 cave - Teleport to cave coordinates (300,400)
+/tppos 500 600 deepcave - Teleport to deep cave coordinates (500,600)
+/tppos 700 800 flat_chromakeypink - Teleport to flat world coordinates (700,800)
+```
+
+All level identifiers support game auto-completion, no need to remember hardcoded dimension numbers.
 
 ### Teleportation System
 **Player-to-player teleportation**:
@@ -121,6 +134,12 @@ All teleportation-related features have cooldown protection, default set to 15 s
 - Back command cooldown: 15 seconds
 
 Admins can adjust cooldown times using the respective configuration commands (1-3600 seconds).
+
+## Technical Improvements (v1.2)
+- **Removed Hardcoded Dimension Mapping**: No longer uses numbers 0,1,2 for dimensions, directly uses LevelIdentifier API
+- **True Cross-Dimension Teleportation**: Uses changeLevel API for asynchronous level switching
+- **Auto-completion Support**: All level identifiers support game auto-completion
+- **Code Optimization**: Cleaned up outdated island coordinate system, optimized import statements
 
 ## License
 

@@ -1,17 +1,13 @@
 package tpamod.commands;
 
-import tpamod.data.WarpData;
-import tpamod.data.WarpConfig;
+import tpamod.data.*;
 import tpamod.listener.WarpListener;
-import tpamod.data.BackData;
-import necesse.engine.commands.CommandLog;
-import necesse.engine.commands.ModularChatCommand;
-import necesse.engine.commands.PermissionLevel;
-import necesse.engine.commands.CmdParameter;
+import necesse.engine.commands.*;
 import necesse.engine.commands.parameterHandlers.PresetStringParameterHandler;
 import necesse.engine.network.client.Client;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
+import necesse.engine.util.LevelIdentifier;
 import necesse.entity.mobs.PlayerMob;
 
 public class WarpCommand extends ModularChatCommand {
@@ -53,34 +49,58 @@ public class WarpCommand extends ModularChatCommand {
             return;
         }
         
+        
         // 传送玩家
         PlayerMob playerMob = serverClient.playerMob;
         if (playerMob != null) {
             // 记录传送前坐标到back系统
             float currentX = playerMob.getX();
             float currentY = playerMob.getY();
-            // 使用默认岛屿和维度坐标
-            int currentIslandX = 0;
-            int currentIslandY = 0;
-            int currentDimension = 0;
+            // 获取当前关卡标识符
+            String currentLevelIdentifier = playerMob.getLevel().getIdentifier().toString();
             
+            // 使用关卡标识符字符串作为关卡类型标识
+            int levelType = Math.abs(currentLevelIdentifier.hashCode() % 1000);
             backData.recordTeleportPosition(String.valueOf(serverClient.authentication),
-                                          currentIslandX, currentIslandY, currentDimension,
+                                          0, 0, levelType,
                                           (int)currentX, (int)currentY);
             
             // 设置冷却时间（所有玩家都受冷却限制）
             warpListener.setCooldown(serverClient.authentication, warpConfig.getCooldownSeconds());
             
-            // 执行传送 - 简化版本，只设置位置
-            playerMob.setPos(warpPoint.x, warpPoint.y, true);
-            
-            logs.add("已传送到传送点: " + warpName);
-            logs.add("坐标: (" + String.format("%.2f", warpPoint.x) + ", " + String.format("%.2f", warpPoint.y) + ")");
+            // 检查是否需要切换关卡
+            String currentLevelIdentifierString = playerMob.getLevel().getIdentifier().toString();
+            if (!currentLevelIdentifierString.equals(warpPoint.levelIdentifier)) {
+                // 需要切换关卡
+                logs.add("正在切换关卡...");
+                logs.add("目标关卡: " + warpPoint.levelIdentifier + " (当前关卡: " + currentLevelIdentifierString + ")");
+                
+                try {
+                    // 创建目标关卡的LevelIdentifier
+                    LevelIdentifier targetLevelIdentifier = new LevelIdentifier(warpPoint.levelIdentifier);
+                    
+                    // 使用changeLevel API切换关卡并直接传送到目标位置
+                    serverClient.changeLevel(targetLevelIdentifier, level -> {
+                        return new java.awt.Point((int)warpPoint.x, (int)warpPoint.y);
+                    }, true);
+                    logs.add("关卡切换成功");
+                    logs.add("已切换到关卡: " + warpPoint.levelIdentifier);
+                    logs.add("已传送到传送点: " + warpName);
+                    logs.add("坐标: (" + String.format("%.2f", warpPoint.x) + ", " + String.format("%.2f", warpPoint.y) + ")");
+                } catch (Exception e) {
+                    logs.add("关卡切换失败: " + e.getMessage());
+                    logs.add("请稍后重试");
+                }
+            } else {
+                // 在同一关卡内传送
+                playerMob.setPos(warpPoint.x, warpPoint.y, true);
+                logs.add("已传送到传送点: " + warpName);
+                logs.add("坐标: (" + String.format("%.2f", warpPoint.x) + ", " + String.format("%.2f", warpPoint.y) + ") 关卡: " + warpPoint.levelIdentifier);
+            }
         } else {
             logs.add("玩家数据错误，传送失败");
         }
     }
-
 
     public boolean shouldBeListed() {
         return true;

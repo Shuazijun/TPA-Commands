@@ -18,6 +18,7 @@ Thumbs.db
 # Game
 steam_appid.txt
 mods/
+config/
 
 # Logs
 logs/
@@ -26,3 +27,9 @@ logs/
 # Temp files
 *.tmp
 *.temp
+
+# Class files
+.class/
+
+# Crash files
+latest-crash.log

@@ -64,9 +64,10 @@ public class TPAMod {
         CommandsManager.registerServerCommand(new TPAcdCommand("tpacd", listener));
         CommandsManager.registerServerCommand(new TPAcdCommand("设置传送请求冷却时间", listener));
         
-        // 注册坐标查询命令
+        // 注册坐标查询命令（已包含关卡信息）
         CommandsManager.registerServerCommand(new GetPosCommand("getpos"));
         CommandsManager.registerServerCommand(new GetPosCommand("获取坐标"));
+        
         
         // 注册管理员传送命令
         CommandsManager.registerServerCommand(new TPPosCommand("tppos", backData));

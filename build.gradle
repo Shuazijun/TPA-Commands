@@ -8,7 +8,7 @@ plugins {
 def modInfo = [
     modID          : "shuazi.tpa.commands",
     modName        : "TPA Commands",
-    modVersion     : "1.1",
+    modVersion     : "1.2",
     gameVersion    : "1.0.1",
     modDescription : "Add TPA and Warp commands to the game",
     author         : "Shuazi",

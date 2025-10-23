@@ -20,26 +20,26 @@ public class WarpData {
         public final String name;
         public final int islandX;
         public final int islandY;
-        public final int dimension;
+        public final String levelIdentifier; // 使用关卡标识符字符串
         public final float x;
         public final float y;
 
-        public WarpPoint(String name, int islandX, int islandY, int dimension, float x, float y) {
+        public WarpPoint(String name, int islandX, int islandY, String levelIdentifier, float x, float y) {
             this.name = name;
             this.islandX = islandX;
             this.islandY = islandY;
-            this.dimension = dimension;
+            this.levelIdentifier = levelIdentifier;
             this.x = x;
             this.y = y;
         }
     }
 
     // 添加传送点
-    public boolean addWarpPoint(String name, int islandX, int islandY, int dimension, float x, float y) {
+    public boolean addWarpPoint(String name, int islandX, int islandY, String levelIdentifier, float x, float y) {
         if (warpPoints.containsKey(name.toLowerCase())) {
             return false; // 传送点已存在
         }
-        warpPoints.put(name.toLowerCase(), new WarpPoint(name, islandX, islandY, dimension, x, y));
+        warpPoints.put(name.toLowerCase(), new WarpPoint(name, islandX, islandY, levelIdentifier, x, y));
         saveWarpPoints();
         return true;
     }
@@ -77,7 +77,7 @@ public class WarpData {
                 for (Map.Entry<String, WarpPoint> entry : warpPoints.entrySet()) {
                     WarpPoint point = entry.getValue();
                     writer.println(point.name + "," + point.islandX + "," + point.islandY + "," + 
-                                 point.dimension + "," + point.x + "," + point.y);
+                                 point.levelIdentifier + "," + point.x + "," + point.y);
                 }
             }
         } catch (Exception e) {
@@ -97,10 +97,10 @@ public class WarpData {
                             String name = parts[0];
                             int islandX = Integer.parseInt(parts[1]);
                             int islandY = Integer.parseInt(parts[2]);
-                            int dimension = Integer.parseInt(parts[3]);
+                            String levelIdentifier = parts[3];
                             float x = Float.parseFloat(parts[4]);
                             float y = Float.parseFloat(parts[5]);
-                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, islandX, islandY, dimension, x, y));
+                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, islandX, islandY, levelIdentifier, x, y));
                         }
                     }
                 }

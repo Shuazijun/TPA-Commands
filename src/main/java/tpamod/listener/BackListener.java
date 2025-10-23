@@ -26,13 +26,13 @@ public class BackListener {
             PlayerMob playerMob = serverClient.playerMob;
             
             // 获取玩家当前位置
-            int islandX = playerMob.getLevel().getIslandX();
-            int islandY = playerMob.getLevel().getIslandY();
-            int dimension = 0; // 默认维度
+            // 使用关卡标识符字符串作为关卡类型标识
+            String levelIdentifier = playerMob.getLevel().getIdentifier().toString();
+            int levelType = getLevelTypeFromIdentifier(levelIdentifier);
             int x = (int) playerMob.x;
             int y = (int) playerMob.y;
             
-            backData.recordTeleportPosition(playerAuth, islandX, islandY, dimension, x, y);
+            backData.recordTeleportPosition(playerAuth, 0, 0, levelType, x, y);
             System.out.println("Back System: Recorded teleport position for " + serverClient.getName());
         }
     }
@@ -44,13 +44,13 @@ public class BackListener {
             PlayerMob playerMob = serverClient.playerMob;
             
             // 获取玩家当前位置
-            int islandX = playerMob.getLevel().getIslandX();
-            int islandY = playerMob.getLevel().getIslandY();
-            int dimension = 0; // 默认维度
+            // 使用关卡标识符字符串作为关卡类型标识
+            String levelIdentifier = playerMob.getLevel().getIdentifier().toString();
+            int levelType = getLevelTypeFromIdentifier(levelIdentifier);
             int x = (int) playerMob.x;
             int y = (int) playerMob.y;
             
-            backData.recordDeathPosition(playerAuth, islandX, islandY, dimension, x, y);
+            backData.recordDeathPosition(playerAuth, 0, 0, levelType, x, y);
             System.out.println("Back System: Recorded death position for " + serverClient.getName());
         }
     }
@@ -76,5 +76,17 @@ public class BackListener {
         // 这个方法用于BackCDCommand设置全局冷却时间
         // 注意：这里我们只更新配置，实际冷却时间在BackConfig中管理
         System.out.println("Back System: Global cooldown time updated to " + seconds + " seconds");
+    }
+    
+    // 根据关卡标识符获取关卡类型
+    private int getLevelTypeFromIdentifier(String levelIdentifier) {
+        try {
+            // 简化处理：使用关卡标识符的哈希值作为类型标识
+            // 在实际使用中，关卡类型主要用于区分不同的关卡位置
+            return Math.abs(levelIdentifier.hashCode() % 1000);
+        } catch (Exception e) {
+            System.out.println("Back System: Failed to get level type from identifier: " + levelIdentifier);
+            return 0; // 默认关卡
+        }
     }
 }

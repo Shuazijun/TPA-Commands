@@ -5,6 +5,8 @@ import necesse.engine.events.PreventableGameEvent;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
 import tpamod.data.BackData;
+// import necesse.engine.util.LevelIdentifier;
+// import necesse.entity.mobs.PlayerMob;
 
 public class TPARequestEvent extends PreventableGameEvent {
     public final ServerClient target;
@@ -28,13 +30,12 @@ public class TPARequestEvent extends PreventableGameEvent {
             if (source.playerMob != null) {
                 float currentX = source.playerMob.getX();
                 float currentY = source.playerMob.getY();
-                // 使用默认岛屿和维度坐标
-                int currentIslandX = 0;
-                int currentIslandY = 0;
-                int currentDimension = 0;
+                // 使用关卡标识符字符串作为关卡类型标识
+                String levelIdentifier = source.playerMob.getLevel().getIdentifier().toString();
+                int currentLevelType = getLevelTypeFromIdentifier(levelIdentifier);
                 
                 backData.recordTeleportPosition(String.valueOf(source.authentication),
-                                              currentIslandX, currentIslandY, currentDimension,
+                                              0, 0, currentLevelType,
                                               (int)currentX, (int)currentY);
             }
             
@@ -53,4 +54,16 @@ public class TPARequestEvent extends PreventableGameEvent {
         logs.addClient("来自 " + source.getName() + " 的传送请求已被拒绝", target);
     }
 
+    // 根据关卡标识符获取关卡类型
+    private int getLevelTypeFromIdentifier(String levelIdentifier) {
+        try {
+            // 简化处理：使用关卡标识符的哈希值作为类型标识
+            // 在实际使用中，关卡类型主要用于区分不同的关卡位置
+            return Math.abs(levelIdentifier.hashCode() % 1000);
+        } catch (Exception e) {
+            System.out.println("TPA System: Failed to get level type from identifier: " + levelIdentifier);
+            return 0; // 默认关卡
+        }
+    }
+    
 }

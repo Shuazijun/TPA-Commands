@@ -1,66 +1,43 @@
-TPA Commands Mod
+TPA Commands Mod v1.3
 
-A comprehensive teleportation system for Necesse that adds player-to-player teleportation, warp points, and position management features.
+A mod that adds TPA commands to the Necesse game.
 
-Features:
+Main Features:
 
-Player Teleportation System
-- /tpa [player] - Request teleport to another player
+✅ Player-to-Player Teleportation System
+- /tpa [player name] - Request teleport to another player
 - /tpac - Accept teleport request
 - /tpad - Deny teleport request
-- /传送请求 [player] - Request teleport to another player (Chinese command)
-- /同意传送 - Accept teleport request (Chinese command)
-- /拒绝传送 - Deny teleport request (Chinese command)
-- Cooldown protection - Prevents spam (15 seconds default)
+- Chinese commands: /传送请求, /同意传送, /拒绝传送
 
-Warp System
-- /newwarp [name] - Create warp points (admin)
-- /delwarp [name] - Delete warp points (admin)
-- /warp [name] - Teleport to warp points
-- /warplist - List all available warp points
-- /新建传送点 [name] - Create warp points (admin, Chinese command)
-- /删除传送点 [name] - Delete warp points (admin, Chinese command)
-- /传送点 [name] - Teleport to warp points (Chinese command)
-- /传送点列表 - List all warp points (Chinese command)
-- Preset names: home, spawn, town, base
+✅ Back System (New in v1.1)
+- /back - Return to previous position (priority to death location, then teleport location)
+- /backcd [seconds] - Set back cooldown time (admin only)
+- Chinese commands: /返回, /设置返回冷却时间
 
-Back System
-- /back - Return to previous position
-- /返回 - Return to previous position (Chinese command)
-- Priority system: Death location > Teleport location
-- Cooldown protection - 15 seconds default
+✅ Warp Point System (New in v1.1)
+- /newwarp [warpName] - Create warp point (admin, supports preset names like home, spawn, town, base)
+- /delwarp [warpName] - Delete warp point (admin)
+- /warp [warpName] - Teleport to warp point (default 15s cooldown)
+- /warplist - List all warp points
+- Chinese commands: /新建传送点, /删除传送点, /传送点, /传送点列表
 
-Position Management
-- /getpos [player] - Get player coordinates (admins can query other players)
-- /tppos [x] [y] [player] - Teleport to specified coordinates (admin)
-- /获取坐标 [player] - Get player coordinates (Chinese command)
-- /传送坐标 [x] [y] [player] - Teleport to specified coordinates (admin, Chinese command)
+✅ Position Query and Teleportation (Enhanced in v1.3)
+- /getpos [player name] - Get player position and level info (admins can query others)
+- /tppos [x] [y] [level identifier] - Teleport to specified coordinates and level (admin)
+- Chinese commands: /获取坐标, /传送坐标
 
-Configuration Commands
-- /tpacd [seconds] - Set TPA cooldown time (admin)
-- /warpcd [seconds] - Set warp cooldown time (admin)
-- /backcd [seconds] - Set back cooldown time (admin)
-- /设置传送请求冷却时间 [seconds] - Set TPA cooldown time (admin, Chinese command)
-- /设置传送点冷却时间 [seconds] - Set warp cooldown time (admin, Chinese command)
-- /设置返回冷却时间 [seconds] - Set back cooldown time (admin, Chinese command)
-- Time range: 1-3600 seconds
+🚀 v1.3 New Features:
+- True cross-dimension teleportation
+- Removed hardcoded dimension mapping, directly uses LevelIdentifier API
+- Supports game auto-completion
+- Code optimization, removed outdated island coordinate system
 
-Key Benefits:
-✅ Easy to Use - Simple commands for all players
-✅ Admin Controls - Full configuration options
-✅ Cooldown Protection - Prevents abuse
-✅ Persistent Data - Warp points and settings saved automatically
-✅ Bilingual Support - English and Chinese commands
-✅ Server Compatible - Works on multiplayer servers
+Cooldown Configuration:
+All teleportation features have cooldown protection, default 15 seconds, admins can configure 1-3600 seconds.
 
-Installation:
-1. Subscribe to this mod
-2. Enable in your server/world settings
-3. Enjoy enhanced teleportation features!
+Permission Levels:
+- Regular players: Can use teleport requests, back, warp point features
+- Admins: Can create/delete warp points, set cooldowns, coordinate teleportation
 
-Mod ID: shuazi.tpa.commands
-Version: 1.1
-Game Version: 1.0.1+
-Author: Shuazi
-
-For support or suggestions, visit GitHub repository: https://github.com/Shuazijun/TPA-Commands
+GitHub Repository: https://github.com/Shuazijun/TPA-Commands
