@@ -1,4 +1,4 @@
-TPA Commands Mod v1.3
+TPA Commands Mod v1.2
 
 A mod that adds TPA commands to the Necesse game.
 
@@ -22,12 +22,12 @@ Main Features:
 - /warplist - List all warp points
 - Chinese commands: /新建传送点, /删除传送点, /传送点, /传送点列表
 
-✅ Position Query and Teleportation (Enhanced in v1.3)
+✅ Position Query and Teleportation (Enhanced in v1.2)
 - /getpos [player name] - Get player position and level info (admins can query others)
 - /tppos [x] [y] [level identifier] - Teleport to specified coordinates and level (admin)
 - Chinese commands: /获取坐标, /传送坐标
 
-🚀 v1.3 New Features:
+🚀 v1.2 New Features:
 - True cross-dimension teleportation
 - Removed hardcoded dimension mapping, directly uses LevelIdentifier API
 - Supports game auto-completion
