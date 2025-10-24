@@ -45,28 +45,10 @@ public class RTPCommand extends ModularChatCommand {
             float originalY = serverClient.playerMob.y;
             String originalBiome = getCurrentBiomeIdentifier(currentLevel, originalX, originalY);
             
-            // 寻找安全的随机位置
-            int maxAttempts = 50; // 最大尝试次数
-            boolean foundSafePosition = false;
-            float randomX = 0;
-            float randomY = 0;
-
-            for (int attempt = 0; attempt < maxAttempts; attempt++) {
-                // 在关卡范围内生成随机坐标（避免边界区域）
-                randomX = GameRandom.globalRandom.getFloatBetween(100, currentLevel.tileWidth * 32 - 100);
-                randomY = GameRandom.globalRandom.getFloatBetween(100, currentLevel.tileHeight * 32 - 100);
-
-                // 检查位置是否安全
-                if (isPositionSafe(currentLevel, randomX, randomY)) {
-                    foundSafePosition = true;
-                    break;
-                }
-            }
-
-            if (!foundSafePosition) {
-                logs.add("无法找到安全的传送位置，请稍后再试");
-                return;
-            }
+            // 使用配置的范围限制生成随机坐标
+            int limitRange = rtpListener.getLimitRange();
+            float randomX = GameRandom.globalRandom.getFloatBetween(limitRange, currentLevel.tileWidth * 32 - limitRange);
+            float randomY = GameRandom.globalRandom.getFloatBetween(limitRange, currentLevel.tileHeight * 32 - limitRange);
 
             // 执行传送
             serverClient.playerMob.setPos(randomX, randomY, true);
@@ -74,7 +56,6 @@ public class RTPCommand extends ModularChatCommand {
             // 记录传送信息到返回系统
             backData.recordTeleportPosition(
                 String.valueOf(serverClient.authentication),
-                0, 0, // islandX和islandY不再使用
                 0, // dimension参数不再使用，使用关卡标识符
                 (int)originalX,
                 (int)originalY,
@@ -95,21 +76,6 @@ public class RTPCommand extends ModularChatCommand {
         }
     }
 
-    // 检查位置是否安全
-    private boolean isPositionSafe(Level level, float x, float y) {
-        try {
-            int tileX = (int)(x / 32.0F);
-            int tileY = (int)(y / 32.0F);
-            
-            // 简化安全检查：只检查目标瓦片是否是空气
-            // 在Necesse中，玩家可以站在大多数瓦片上
-            var tile = level.getTile(tileX, tileY);
-            return tile == null; // 如果是空气瓦片，则认为是安全的
-            
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     // 获取当前位置的群系标识符
     private String getCurrentBiomeIdentifier(Level level, float x, float y) {

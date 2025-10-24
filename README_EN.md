@@ -49,8 +49,10 @@ A mod that adds TPA commands to the Necesse game.
 ### Random Teleport System (New in v1.5)
 - **/rtp** - Random teleport to a random position in current level (default 15s cooldown)
 - **/rtpcd [seconds]** - Set random teleport cooldown time (admin only, default 15 seconds)
+- **/rtplimit [range]** - Set random teleport range limit (admin only, default 1000 pixels, min 100 pixels, no upper limit)
 - **/随机传送** - Random teleport to a random position in current level (Chinese command)
 - **/设置随机传送冷却时间 [seconds]** - Set random teleport cooldown time (admin only, Chinese command)
+- **/设置随机传送范围 [range]** - Set random teleport range limit (admin only, Chinese command)
 
 ### Position Query and Teleportation (Enhanced in v1.2)
 - **/getpos [player name]** - Get player position and level information (admins can query other players)
@@ -106,7 +108,9 @@ A mod that adds TPA commands to the Necesse game.
 **Admin Commands**:
 ```
 /rtpcd [seconds] - Set random teleport cooldown time (1-3600 seconds, default 15)
+/rtplimit [range] - Set random teleport range limit (min 100 pixels, no upper limit, default 1000)
 /设置随机传送冷却时间 [seconds] - Set random teleport cooldown time (Chinese command)
+/设置随机传送范围 [range] - Set random teleport range limit (Chinese command)
 ```
 
 ### Position Query and Teleportation (New Cross-Dimension Features in v1.2)
@@ -166,6 +170,7 @@ Admins can adjust cooldown times using the respective configuration commands (1-
 ## Technical Improvements (v1.5)
 - **Random Teleport System**: Added `/rtp` and `/随机传送` commands for random teleportation within current level
 - **Random Teleport Cooldown**: Default 15-second cooldown for regular players, admins and owners exempt
+- **Configurable Range Limit**: Added `/rtplimit` command to set random teleport range (min 100 pixels, no upper limit)
 - **Safe Position Checking**: Automatically finds safe teleport locations, avoids dangerous areas
 - **Unified Configuration Files**: All configuration files use `.dat` format with standardized naming
 - **Complete Biome Information Support**: All teleportation systems now record and display real biome information

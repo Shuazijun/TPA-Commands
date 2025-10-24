@@ -15,6 +15,7 @@ import tpamod.commands.BackCommand;
 import tpamod.commands.BackCDCommand;
 import tpamod.commands.RTPCommand;
 import tpamod.commands.RTPCDCommand;
+import tpamod.commands.RTPLimitCommand;
 import tpamod.events.TPARequestEvent;
 import tpamod.events.TPAResponseEvent;
 import tpamod.listener.TPAListener;
@@ -102,6 +103,10 @@ public class TPAMod {
         CommandsManager.registerServerCommand(new RTPCommand("随机传送", rtpListener, backData));
         CommandsManager.registerServerCommand(new RTPCDCommand("rtpcd", rtpListener));
         CommandsManager.registerServerCommand(new RTPCDCommand("设置随机传送冷却时间", rtpListener));
+        
+        // 注册随机传送范围限制命令
+        CommandsManager.registerServerCommand(new RTPLimitCommand("rtplimit", rtpListener));
+        CommandsManager.registerServerCommand(new RTPLimitCommand("设置随机传送范围", rtpListener));
     }
 
     public void initResources() {

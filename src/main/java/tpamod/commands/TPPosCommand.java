@@ -54,7 +54,7 @@ public class TPPosCommand extends ModularChatCommand {
                 // 获取当前群系标识符
                 String currentBiomeIdentifier = getCurrentBiomeIdentifier(target.playerMob.getLevel(), currentX, currentY);
                 backData.recordTeleportPosition(String.valueOf(target.authentication),
-                                              0, 0, levelType,
+                                              levelType,
                                               (int)currentX, (int)currentY, currentBiomeIdentifier);
             }
             

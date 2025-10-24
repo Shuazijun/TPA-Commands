@@ -67,7 +67,7 @@ public class WarpCommand extends ModularChatCommand {
             // 获取当前群系标识符
             String currentBiomeIdentifier = getCurrentBiomeIdentifier(playerMob.getLevel(), currentX, currentY);
             backData.recordTeleportPosition(String.valueOf(serverClient.authentication),
-                                          0, 0, levelType,
+                                          levelType,
                                           (int)currentX, (int)currentY, currentBiomeIdentifier);
             
             // 设置冷却时间（管理员不受冷却限制）

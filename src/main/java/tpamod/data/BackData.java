@@ -54,12 +54,12 @@ public class BackData {
     }
 
     // 记录传送前坐标
-    public void recordTeleportPosition(String playerAuth, int islandX, int islandY, int dimension, int x, int y) {
-        recordTeleportPosition(playerAuth, islandX, islandY, dimension, x, y, "default");
+    public void recordTeleportPosition(String playerAuth, int dimension, int x, int y) {
+        recordTeleportPosition(playerAuth, dimension, x, y, "default");
     }
     
     // 记录传送前坐标（带群系信息）
-    public void recordTeleportPosition(String playerAuth, int islandX, int islandY, int dimension, int x, int y, String biome) {
+    public void recordTeleportPosition(String playerAuth, int dimension, int x, int y, String biome) {
         PlayerBackData data = getPlayerBackData(playerAuth);
         data.lastTeleportDimension = dimension;
         data.lastTeleportX = x;
@@ -70,12 +70,12 @@ public class BackData {
     }
 
     // 记录死亡坐标
-    public void recordDeathPosition(String playerAuth, int islandX, int islandY, int dimension, int x, int y) {
-        recordDeathPosition(playerAuth, islandX, islandY, dimension, x, y, "default");
+    public void recordDeathPosition(String playerAuth, int dimension, int x, int y) {
+        recordDeathPosition(playerAuth, dimension, x, y, "default");
     }
     
     // 记录死亡坐标（带群系信息）
-    public void recordDeathPosition(String playerAuth, int islandX, int islandY, int dimension, int x, int y, String biome) {
+    public void recordDeathPosition(String playerAuth, int dimension, int x, int y, String biome) {
         PlayerBackData data = getPlayerBackData(playerAuth);
         data.lastDeathDimension = dimension;
         data.lastDeathX = x;

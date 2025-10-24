@@ -33,7 +33,7 @@ public class TPARequestEvent extends PreventableGameEvent {
                 String currentBiomeIdentifier = getCurrentBiomeIdentifier(source.playerMob.getLevel(), currentX, currentY);
                 
                 backData.recordTeleportPosition(String.valueOf(source.authentication),
-                                              0, 0, currentLevelType,
+                                              currentLevelType,
                                               (int)currentX, (int)currentY, currentBiomeIdentifier);
             }
             

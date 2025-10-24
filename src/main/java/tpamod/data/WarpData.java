@@ -23,7 +23,7 @@ public class WarpData {
         public final float x;
         public final float y;
 
-        public WarpPoint(String name, int islandX, int islandY, String levelIdentifier, String biomeIdentifier, float x, float y) {
+        public WarpPoint(String name, String levelIdentifier, String biomeIdentifier, float x, float y) {
             this.name = name;
             this.levelIdentifier = levelIdentifier;
             this.biomeIdentifier = biomeIdentifier;
@@ -33,11 +33,11 @@ public class WarpData {
     }
 
     // 添加传送点
-    public boolean addWarpPoint(String name, int islandX, int islandY, String levelIdentifier, String biomeIdentifier, float x, float y) {
+    public boolean addWarpPoint(String name, String levelIdentifier, String biomeIdentifier, float x, float y) {
         if (warpPoints.containsKey(name.toLowerCase())) {
             return false; // 传送点已存在
         }
-        warpPoints.put(name.toLowerCase(), new WarpPoint(name, islandX, islandY, levelIdentifier, biomeIdentifier, x, y));
+        warpPoints.put(name.toLowerCase(), new WarpPoint(name, levelIdentifier, biomeIdentifier, x, y));
         saveWarpPoints();
         return true;
     }
@@ -74,8 +74,7 @@ public class WarpData {
             try (PrintWriter writer = new PrintWriter(new FileWriter(warpFile))) {
                 for (Map.Entry<String, WarpPoint> entry : warpPoints.entrySet()) {
                     WarpPoint point = entry.getValue();
-                    writer.println(point.name + "," + 0 + "," + 0 + "," +
-                                 point.levelIdentifier + "," + point.biomeIdentifier + "," + point.x + "," + point.y);
+                    writer.println(point.name + "," + point.levelIdentifier + "," + point.biomeIdentifier + "," + point.x + "," + point.y);
                 }
             }
         } catch (Exception e) {
@@ -91,15 +90,22 @@ public class WarpData {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         String[] parts = line.split(",");
-                        if (parts.length == 7) {
-                            // 新格式：name,islandX,islandY,levelIdentifier,biomeIdentifier,x,y
+                        if (parts.length == 5) {
+                            // 新格式：name,levelIdentifier,biomeIdentifier,x,y
                             String name = parts[0];
-                            // 跳过islandX和islandY参数（第1和第2部分），因为它们不再使用
+                            String levelIdentifier = parts[1];
+                            String biomeIdentifier = parts[2];
+                            float x = Float.parseFloat(parts[3]);
+                            float y = Float.parseFloat(parts[4]);
+                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, levelIdentifier, biomeIdentifier, x, y));
+                        } else if (parts.length == 7) {
+                            // 向后兼容旧格式：name,islandX,islandY,levelIdentifier,biomeIdentifier,x,y
+                            String name = parts[0];
                             String levelIdentifier = parts[3];
                             String biomeIdentifier = parts[4];
                             float x = Float.parseFloat(parts[5]);
                             float y = Float.parseFloat(parts[6]);
-                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, 0, 0, levelIdentifier, biomeIdentifier, x, y));
+                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, levelIdentifier, biomeIdentifier, x, y));
                         } else if (parts.length == 6) {
                             // 向后兼容旧格式：name,islandX,islandY,levelIdentifier,x,y
                             String name = parts[0];
@@ -108,7 +114,7 @@ public class WarpData {
                             float y = Float.parseFloat(parts[5]);
                             // 为旧格式设置默认群系
                             String biomeIdentifier = "default";
-                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, 0, 0, levelIdentifier, biomeIdentifier, x, y));
+                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, levelIdentifier, biomeIdentifier, x, y));
                         }
                     }
                 }

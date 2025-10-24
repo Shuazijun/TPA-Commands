@@ -35,7 +35,7 @@ public class BackListener {
             // 获取当前群系标识符
             String biomeIdentifier = getCurrentBiomeIdentifier(playerMob.getLevel(), playerMob.x, playerMob.y);
             
-            backData.recordTeleportPosition(playerAuth, 0, 0, levelType, x, y, biomeIdentifier);
+            backData.recordTeleportPosition(playerAuth, levelType, x, y, biomeIdentifier);
             System.out.println("Back System: Recorded teleport position for " + serverClient.getName() + " in biome: " + biomeIdentifier);
         }
     }
@@ -55,7 +55,7 @@ public class BackListener {
             // 获取当前群系标识符
             String biomeIdentifier = getCurrentBiomeIdentifier(playerMob.getLevel(), playerMob.x, playerMob.y);
             
-            backData.recordDeathPosition(playerAuth, 0, 0, levelType, x, y, biomeIdentifier);
+            backData.recordDeathPosition(playerAuth, levelType, x, y, biomeIdentifier);
             System.out.println("Back System: Recorded death position for " + serverClient.getName() + " in biome: " + biomeIdentifier);
         }
     }

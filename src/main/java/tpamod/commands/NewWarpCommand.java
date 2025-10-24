@@ -30,7 +30,7 @@ public class NewWarpCommand extends ModularChatCommand {
             String currentBiomeIdentifier = getCurrentBiomeIdentifier(serverClient.playerMob.getLevel(), playerX, playerY);
             
             // 创建传送点
-            if (warpData.addWarpPoint(warpName, 0, 0, currentLevelIdentifier, currentBiomeIdentifier, playerX, playerY)) {
+            if (warpData.addWarpPoint(warpName, currentLevelIdentifier, currentBiomeIdentifier, playerX, playerY)) {
                 logs.add("传送点 '" + warpName + "' 已创建");
                 logs.add("位置: 关卡(" + currentLevelIdentifier + ") 群系(" + currentBiomeIdentifier + ") 坐标(" + String.format("%.2f", playerX) + ", " + String.format("%.2f", playerY) + ")");
             } else {

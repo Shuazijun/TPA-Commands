@@ -4,7 +4,7 @@ A mod that adds TPA commands to the Necesse game.
 
 Main Features:
 
-✅ Player-to-Player Teleportation System
+Player-to-Player Teleportation System
 - /tpa [player name] - Request teleport to another player
 - /tpac [player name] - Accept specific player's teleport request (point-to-point)
 - /tpad [player name] - Deny specific player's teleport request (point-to-point)
@@ -12,44 +12,44 @@ Main Features:
 - /tpad - Deny all pending teleport requests (batch)
 - Chinese commands: /传送请求, /同意传送 [player name], /拒绝传送 [player name], /同意传送, /拒绝传送
 
-✅ Back System (New in v1.1)
+Back System (New in v1.1)
 - /back - Return to previous position (priority to death location, then teleport location)
 - /backcd [seconds] - Set back cooldown time (admin only)
 - Chinese commands: /返回, /设置返回冷却时间
 
-✅ Warp Point System (New in v1.1)
+Warp Point System (New in v1.1)
 - /newwarp [warpName] - Create warp point (admin, supports preset names like home, spawn, town, base)
 - /delwarp [warpName] - Delete warp point (admin)
 - /warp [warpName] - Teleport to warp point (default 15s cooldown)
 - /warplist - List all warp points
 - Chinese commands: /新建传送点, /删除传送点, /传送点, /传送点列表
 
-✅ Random Teleport System (New in v1.5)
-- /rtp - Random teleport to random position in current level (default 15s cooldown)
+Random Teleport System (New in v1.5)
+- /rtp - Random teleport to a random position in current level (default 15s cooldown) (Unstable, you may be caught by the wall)
 - /rtpcd [seconds] - Set random teleport cooldown time (admin only)
-- Chinese commands: /随机传送, /设置随机传送冷却时间
+- /rtplimit [range] - Set random teleport range limit (admin only, default 1000 pixels, min 100 pixels, no upper limit)
+- Chinese commands: /随机传送, /设置随机传送冷却时间, /设置随机传送范围
 
-✅ Position Query and Teleportation (Enhanced in v1.2)
+Position Query and Teleportation (Enhanced in v1.2)
 - /getpos [player name] - Get player position and level info (admins can query others)
 - /tppos [x] [y] [level identifier] - Teleport to specified coordinates and level (admin)
 - Chinese commands: /获取坐标, /传送坐标
 
-🚀 v1.5 New Features:
-- Random teleport system: Added /rtp and /随机传送 commands
-- Same-level random teleportation: Players teleport randomly within current level
-- Safe position checking: Automatically finds safe teleport locations
-- Cooldown management: Default 15s cooldown for regular players, admins and owners exempt
-- Unified configuration files: All configuration files use .dat format with standardized naming
-- Complete biome information support: All teleportation systems record and display real biome information
-- Warp point biome storage: Automatically records current biome when creating warp points
-- Back system biome recording: Records real biome information from teleportation and death locations
-- Position query biome display: GetPos command displays complete biome information for current position
-- Owner permission support: Server owners now have the same permissions as administrators
-- Permission utility class: Unified permission checking tool, simplified permission management
-- Point-to-point teleport response: Support precise accept/deny of specific player requests
-- Request conflict prevention: Each target player can only have one pending request
-- Code cleanup: Removed unused parameters from configuration files
-- True cross-dimension teleportation
+v1.5 New Features:
+- Random Teleport System: Added /rtp and /随机传送 commands
+- Configurable Range Limit: Added /rtplimit command to set random teleport range (min 100 pixels, no upper limit)
+- Safe Position Checking: Automatically finds safe teleport locations
+- Cooldown Management: Default 15-second cooldown for regular players, admins and owners exempt
+- Unified Configuration Files: All configuration files use .dat format with standardized naming
+- Complete Biome Information Support: All teleportation systems record and display real biome information
+- Warp Point Biome Storage: Warp points automatically record current biome when created
+- Back System Biome Recording: Records real biome information from teleportation and death locations
+- Position Query Biome Display: GetPos command displays complete biome information
+- Owner Permission Support: Server owners have same permissions as administrators
+- Point-to-Point Teleport Response: Support /tpac playerName and /tpad playerName for precise accept/deny
+- Request Conflict Prevention: Each target player can only have one pending request
+- Code Cleanup: Removed unused parameters from configuration files
+- True Cross-Dimension Teleportation
 - Removed hardcoded dimension mapping, directly uses LevelIdentifier API
 - Supports game auto-completion
 - Code optimization, removed outdated island coordinate system
@@ -58,7 +58,7 @@ Cooldown Configuration:
 All teleportation features have cooldown protection, default 15 seconds, admins can configure 1-3600 seconds.
 
 Permission Levels:
-- Regular players: Can use teleport requests, back, warp point features
-- Admins: Can create/delete warp points, set cooldowns, coordinate teleportation
+- Regular players: Can use teleport requests, back, warp point, random teleport features
+- Admins: Can create/delete warp points, set cooldowns, coordinate teleportation, set random teleport range
 
 GitHub Repository: https://github.com/Shuazijun/TPA-Commands

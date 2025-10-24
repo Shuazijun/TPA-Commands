@@ -48,8 +48,6 @@ public class GetPosCommand extends ModularChatCommand {
             logs.add("关卡: " + levelIdentifier);
             logs.add("群系: " + biomeIdentifier);
             logs.add("坐标: (" + String.format("%.2f", playerX) + ", " + String.format("%.2f", playerY) + ")");
-            // 添加默认空行防止指令tab补全功能挡住显示信息
-            logs.add(" ");
 
         } else {
             logs.add("无法获取玩家信息");
