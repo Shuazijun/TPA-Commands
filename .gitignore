@@ -27,6 +27,7 @@ logs/
 # Temp files
 *.tmp
 *.temp
+temp_*/
 
 # Class files
 .class/
