@@ -7,7 +7,6 @@ import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
 import necesse.engine.util.LevelIdentifier;
 import tpamod.data.BackData;
-// import necesse.entity.mobs.PlayerMob;
 
 public class TPPosCommand extends ModularChatCommand {
     private final BackData backData;

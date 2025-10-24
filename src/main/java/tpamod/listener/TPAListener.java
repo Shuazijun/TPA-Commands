@@ -71,6 +71,16 @@ public class TPAListener {
     }
 
     private void onRequest(TPARequestEvent request) {
+        // 检查目标玩家是否已有其他待处理请求，如果有则拒绝新请求
+        // 确保每个目标玩家只能有一个待处理请求
+        TPARequestEvent existingRequest = findRequestByTarget(request.target.getName());
+        if (existingRequest != null) {
+            // 目标玩家已有待处理请求，拒绝新请求
+            request.preventDefault();
+            request.logs.addClient(request.target.getName() + " 已有待处理的传送请求，请稍后再试", request.source);
+            return;
+        }
+        
         // 使用"发送者->接收者"作为缓存键，确保每个玩家的冷却时间独立
         String cacheKey = getCacheKey(request.source.getName(), request.target.getName());
         if (requests.getIfPresent(cacheKey) == null) {
@@ -86,20 +96,42 @@ public class TPAListener {
     }
 
     private void onResponse(TPAResponseEvent response) {
-        // 查找所有以当前玩家为目标的请求
-        TPARequestEvent request = findRequestByTarget(response.teleportTarget.getName());
-        if(request == null) {
-            response.preventDefault();
-            return;
-        }
-        if(response.accepted) {
-            request.execute();
+        if (response.sourcePlayer != null) {
+            // 点对点响应：处理指定玩家的请求
+            String cacheKey = getCacheKey(response.sourcePlayer.getName(), response.teleportTarget.getName());
+            TPARequestEvent request = requests.getIfPresent(cacheKey);
+            if (request == null) {
+                response.preventDefault();
+                return;
+            }
+            if (response.accepted) {
+                request.execute();
+            } else {
+                request.reject();
+            }
+            requests.invalidate(cacheKey);
         } else {
-            request.reject();
+            // 无指定玩家：处理所有待处理请求（保持向后兼容）
+            boolean foundRequest = false;
+            // 查找所有以当前玩家为目标的请求
+            TPARequestEvent request = findRequestByTarget(response.teleportTarget.getName());
+            while (request != null) {
+                foundRequest = true;
+                if (response.accepted) {
+                    request.execute();
+                } else {
+                    request.reject();
+                }
+                // 移除已处理的请求
+                String cacheKey = getCacheKey(request.source.getName(), request.target.getName());
+                requests.invalidate(cacheKey);
+                // 查找下一个请求
+                request = findRequestByTarget(response.teleportTarget.getName());
+            }
+            if (!foundRequest) {
+                response.preventDefault();
+            }
         }
-        // 使用正确的缓存键来移除请求
-        String cacheKey = getCacheKey(request.source.getName(), request.target.getName());
-        requests.invalidate(cacheKey);
     }
 
     // 根据目标玩家查找请求

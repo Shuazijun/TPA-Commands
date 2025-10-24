@@ -6,8 +6,6 @@ import necesse.engine.commands.parameterHandlers.PresetStringParameterHandler;
 import necesse.engine.network.client.Client;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
-// import necesse.engine.util.LevelIdentifier;
-// import necesse.entity.mobs.PlayerMob;
 
 public class NewWarpCommand extends ModularChatCommand {
     private final WarpData warpData;

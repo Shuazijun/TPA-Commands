@@ -44,7 +44,7 @@ public class BackCommand extends ModularChatCommand {
         if (playerData.hasDeathRecord) {
             // 返回死亡坐标
             teleportPlayer(serverClient,
-                playerData.lastDeathIslandX, playerData.lastDeathIslandY,
+                0, 0, // islandX和islandY不再使用，传入默认值
                 playerData.lastDeathDimension, playerData.lastDeathX, playerData.lastDeathY, logs);
             
             // 清除死亡记录
@@ -54,7 +54,7 @@ public class BackCommand extends ModularChatCommand {
         } else if (playerData.hasTeleportRecord) {
             // 返回传送坐标
             teleportPlayer(serverClient,
-                playerData.lastTeleportIslandX, playerData.lastTeleportIslandY,
+                0, 0, // islandX和islandY不再使用，传入默认值
                 playerData.lastTeleportDimension, playerData.lastTeleportX, playerData.lastTeleportY, logs);
             
             // 清除传送记录

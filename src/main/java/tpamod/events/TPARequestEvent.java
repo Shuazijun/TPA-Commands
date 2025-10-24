@@ -2,23 +2,18 @@ package tpamod.events;
 
 import necesse.engine.commands.CommandLog;
 import necesse.engine.events.PreventableGameEvent;
-import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
 import tpamod.data.BackData;
-// import necesse.engine.util.LevelIdentifier;
-// import necesse.entity.mobs.PlayerMob;
 
 public class TPARequestEvent extends PreventableGameEvent {
     public final ServerClient target;
     public final ServerClient source;
-    // private final Server server;
-    private final CommandLog logs;
+    public final CommandLog logs;
     private final BackData backData;
 
-    public TPARequestEvent(ServerClient source, ServerClient target, Server server, CommandLog logs, BackData backData) {
+    public TPARequestEvent(ServerClient source, ServerClient target, CommandLog logs, BackData backData) {
         this.source = source;
         this.target = target;
-        // this.server = server;
         this.logs = logs;
         this.backData = backData;
     }

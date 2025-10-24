@@ -18,16 +18,12 @@ public class WarpData {
     // 传送点数据类
     public static class WarpPoint {
         public final String name;
-        public final int islandX;
-        public final int islandY;
         public final String levelIdentifier; // 使用关卡标识符字符串
         public final float x;
         public final float y;
 
         public WarpPoint(String name, int islandX, int islandY, String levelIdentifier, float x, float y) {
             this.name = name;
-            this.islandX = islandX;
-            this.islandY = islandY;
             this.levelIdentifier = levelIdentifier;
             this.x = x;
             this.y = y;
@@ -76,7 +72,7 @@ public class WarpData {
             try (PrintWriter writer = new PrintWriter(new FileWriter(warpFile))) {
                 for (Map.Entry<String, WarpPoint> entry : warpPoints.entrySet()) {
                     WarpPoint point = entry.getValue();
-                    writer.println(point.name + "," + point.islandX + "," + point.islandY + "," + 
+                    writer.println(point.name + "," + 0 + "," + 0 + "," +
                                  point.levelIdentifier + "," + point.x + "," + point.y);
                 }
             }
@@ -95,12 +91,11 @@ public class WarpData {
                         String[] parts = line.split(",");
                         if (parts.length == 6) {
                             String name = parts[0];
-                            int islandX = Integer.parseInt(parts[1]);
-                            int islandY = Integer.parseInt(parts[2]);
+                            // 跳过islandX和islandY参数（第1和第2部分），因为它们不再使用
                             String levelIdentifier = parts[3];
                             float x = Float.parseFloat(parts[4]);
                             float y = Float.parseFloat(parts[5]);
-                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, islandX, islandY, levelIdentifier, x, y));
+                            warpPoints.put(name.toLowerCase(), new WarpPoint(name, 0, 0, levelIdentifier, x, y));
                         }
                     }
                 }

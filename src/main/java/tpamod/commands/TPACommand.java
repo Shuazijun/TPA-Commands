@@ -43,9 +43,9 @@ public class TPACommand extends ModularChatCommand {
             String clientName = serverClient == null ? "服务器" : serverClient.getName();
             logs.add("传送到 " + target.getName());
             logs.addClient("来自 " + clientName + " 的传送请求", target);
-            logs.addClient("使用 /tpac 或 /tpad " + clientName, target);
+            logs.addClient("使用 /tpac " + clientName + " 同意或 /tpad " + clientName + " 拒绝", target);
             AtomicBoolean accepted = new AtomicBoolean(false);
-            GameEvents.triggerEvent(new TPARequestEvent(serverClient, target, server, logs, backData), (TPARequestEvent e) -> {
+            GameEvents.triggerEvent(new TPARequestEvent(serverClient, target, logs, backData), (TPARequestEvent e) -> {
                 accepted.set(true);
             });
             if(!accepted.get()) {

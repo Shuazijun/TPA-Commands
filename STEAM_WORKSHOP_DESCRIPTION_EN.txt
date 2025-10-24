@@ -1,4 +1,4 @@
-TPA Commands Mod v1.2
+TPA Commands Mod v1.3
 
 A mod that adds TPA commands to the Necesse game.
 
@@ -6,9 +6,11 @@ Main Features:
 
 ✅ Player-to-Player Teleportation System
 - /tpa [player name] - Request teleport to another player
-- /tpac - Accept teleport request
-- /tpad - Deny teleport request
-- Chinese commands: /传送请求, /同意传送, /拒绝传送
+- /tpac [player name] - Accept specific player's teleport request (point-to-point)
+- /tpad [player name] - Deny specific player's teleport request (point-to-point)
+- /tpac - Accept all pending teleport requests (batch)
+- /tpad - Deny all pending teleport requests (batch)
+- Chinese commands: /传送请求, /同意传送 [player name], /拒绝传送 [player name], /同意传送, /拒绝传送
 
 ✅ Back System (New in v1.1)
 - /back - Return to previous position (priority to death location, then teleport location)
@@ -27,7 +29,10 @@ Main Features:
 - /tppos [x] [y] [level identifier] - Teleport to specified coordinates and level (admin)
 - Chinese commands: /获取坐标, /传送坐标
 
-🚀 v1.2 New Features:
+🚀 v1.3 New Features:
+- Point-to-point teleport response: Support precise accept/deny of specific player requests
+- Request conflict prevention: Each target player can only have one pending request
+- Code cleanup: Removed unused parameters from configuration files
 - True cross-dimension teleportation
 - Removed hardcoded dimension mapping, directly uses LevelIdentifier API
 - Supports game auto-completion

@@ -8,7 +8,7 @@ A mod that adds TPA commands to the Necesse game.
 
 - **Mod ID**: `shuazi.tpa.commands`
 - **Mod Name**: `TPA Commands`
-- **Mod Version**: `1.2`
+- **Mod Version**: `1.3`
 - **Target Game Version**: `1.0.1`
 - **Mod Description**: `Add TPA and Warp commands to the game`
 - **Author**: `Shuazi`
@@ -18,11 +18,15 @@ A mod that adds TPA commands to the Necesse game.
 
 ### Teleportation System
 - **/tpa [player name]** - Request teleport to another player
-- **/tpac** - Accept teleport request
-- **/tpad** - Deny teleport request
+- **/tpac [player name]** - Accept specific player's teleport request (point-to-point)
+- **/tpad [player name]** - Deny specific player's teleport request (point-to-point)
+- **/tpac** - Accept all pending teleport requests (batch)
+- **/tpad** - Deny all pending teleport requests (batch)
 - **/传送请求 [player name]** - Request teleport to another player (Chinese command)
-- **/同意传送** - Accept teleport request (Chinese command)
-- **/拒绝传送** - Deny teleport request (Chinese command)
+- **/同意传送 [player name]** - Accept specific player's teleport request (point-to-point, Chinese command)
+- **/拒绝传送 [player name]** - Deny specific player's teleport request (point-to-point, Chinese command)
+- **/同意传送** - Accept all pending teleport requests (batch, Chinese command)
+- **/拒绝传送** - Deny all pending teleport requests (batch, Chinese command)
 
 ### Back System (New in v1.1)
 - **/back** - Return to previous position (priority to death location, then teleport location)
@@ -118,12 +122,16 @@ All level identifiers support game auto-completion, no need to remember hardcode
 **Player-to-player teleportation**:
 ```
 /tpa [player name] - Send teleport request (with cooldown, default 15 seconds)
-/tpac - Accept request
-/tpad - Deny request
+/tpac [player name] - Accept specific player's teleport request (point-to-point)
+/tpad [player name] - Deny specific player's teleport request (point-to-point)
+/tpac - Accept all pending teleport requests (batch)
+/tpad - Deny all pending teleport requests (batch)
 /tpacd [seconds] - Set TPA request cooldown time (admin only)
 /传送请求 [player name] - Send teleport request (Chinese command)
-/同意传送 - Accept request (Chinese command)
-/拒绝传送 - Deny request (Chinese command)
+/同意传送 [player name] - Accept specific player's teleport request (point-to-point, Chinese command)
+/拒绝传送 [player name] - Deny specific player's teleport request (point-to-point, Chinese command)
+/同意传送 - Accept all pending teleport requests (batch, Chinese command)
+/拒绝传送 - Deny all pending teleport requests (batch, Chinese command)
 /设置传送请求冷却时间 [seconds] - Set TPA request cooldown time (admin only, Chinese command)
 ```
 
@@ -135,7 +143,10 @@ All teleportation-related features have cooldown protection, default set to 15 s
 
 Admins can adjust cooldown times using the respective configuration commands (1-3600 seconds).
 
-## Technical Improvements (v1.2)
+## Technical Improvements (v1.3)
+- **Point-to-Point Teleport Response**: Support `/tpac playerName` and `/tpad playerName` for precise accept/deny of specific player requests
+- **Request Conflict Prevention**: Each target player can only have one pending request, preventing confusion from multiple simultaneous requests
+- **Code Cleanup**: Removed unused parameters from configuration files, optimized storage efficiency
 - **Removed Hardcoded Dimension Mapping**: No longer uses numbers 0,1,2 for dimensions, directly uses LevelIdentifier API
 - **True Cross-Dimension Teleportation**: Uses changeLevel API for asynchronous level switching
 - **Auto-completion Support**: All level identifiers support game auto-completion
