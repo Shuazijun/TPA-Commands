@@ -6,6 +6,7 @@ import necesse.engine.network.client.Client;
 import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
 import necesse.engine.util.LevelIdentifier;
+import necesse.level.maps.Level;
 import tpamod.data.BackData;
 
 public class TPPosCommand extends ModularChatCommand {
@@ -50,9 +51,11 @@ public class TPPosCommand extends ModularChatCommand {
                 
                 // 使用关卡标识符字符串作为关卡类型标识
                 int levelType = Math.abs(currentLevelIdentifier.hashCode() % 1000);
+                // 获取当前群系标识符
+                String currentBiomeIdentifier = getCurrentBiomeIdentifier(target.playerMob.getLevel(), currentX, currentY);
                 backData.recordTeleportPosition(String.valueOf(target.authentication),
                                               0, 0, levelType,
-                                              (int)currentX, (int)currentY);
+                                              (int)currentX, (int)currentY, currentBiomeIdentifier);
             }
             
             // 处理传送
@@ -110,5 +113,23 @@ public class TPPosCommand extends ModularChatCommand {
         } catch (Exception e) {
             logs.add("传送失败: " + e.getMessage());
         }
+    }
+    
+    // 获取当前位置的群系标识符
+    private String getCurrentBiomeIdentifier(Level level, float x, float y) {
+        try {
+            // 将坐标转换为瓦片坐标
+            int tileX = (int)(x / 32.0F);
+            int tileY = (int)(y / 32.0F);
+            
+            // 获取该位置的群系
+            var biome = level.getBiome(tileX, tileY);
+            if (biome != null) {
+                return biome.getStringID();
+            }
+        } catch (Exception e) {
+            System.out.println("TPPos Command: Failed to get biome identifier: " + e.getMessage());
+        }
+        return "unknown"; // 如果获取失败，返回未知群系
     }
 }

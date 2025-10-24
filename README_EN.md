@@ -8,7 +8,7 @@ A mod that adds TPA commands to the Necesse game.
 
 - **Mod ID**: `shuazi.tpa.commands`
 - **Mod Name**: `TPA Commands`
-- **Mod Version**: `1.3`
+- **Mod Version**: `1.5`
 - **Target Game Version**: `1.0.1`
 - **Mod Description**: `Add TPA and Warp commands to the game`
 - **Author**: `Shuazi`
@@ -45,6 +45,12 @@ A mod that adds TPA commands to the Necesse game.
 - **/传送点 [warpName]** - Teleport to specified warp point (Chinese command)
 - **/传送点列表** - List all available warp points (Chinese command)
 - **/设置传送点冷却时间 [seconds]** - Set warp point cooldown time (admin only, Chinese command)
+
+### Random Teleport System (New in v1.5)
+- **/rtp** - Random teleport to a random position in current level (default 15s cooldown)
+- **/rtpcd [seconds]** - Set random teleport cooldown time (admin only, default 15 seconds)
+- **/随机传送** - Random teleport to a random position in current level (Chinese command)
+- **/设置随机传送冷却时间 [seconds]** - Set random teleport cooldown time (admin only, Chinese command)
 
 ### Position Query and Teleportation (Enhanced in v1.2)
 - **/getpos [player name]** - Get player position and level information (admins can query other players)
@@ -88,6 +94,19 @@ A mod that adds TPA commands to the Necesse game.
 /warplist - List all available warp points
 /传送点 [warpName] - Teleport to specified warp point (Chinese command)
 /传送点列表 - List all available warp points (Chinese command)
+```
+
+### Random Teleport System (New in v1.5)
+**Player Commands**:
+```
+/rtp - Random teleport to a random position in current level (with cooldown, default 15 seconds)
+/随机传送 - Random teleport to a random position in current level (Chinese command)
+```
+
+**Admin Commands**:
+```
+/rtpcd [seconds] - Set random teleport cooldown time (1-3600 seconds, default 15)
+/设置随机传送冷却时间 [seconds] - Set random teleport cooldown time (Chinese command)
 ```
 
 ### Position Query and Teleportation (New Cross-Dimension Features in v1.2)
@@ -140,10 +159,21 @@ All teleportation-related features have cooldown protection, default set to 15 s
 - TPA request cooldown: 15 seconds
 - Warp point usage cooldown: 15 seconds
 - Back command cooldown: 15 seconds
+- Random teleport cooldown: 15 seconds
 
 Admins can adjust cooldown times using the respective configuration commands (1-3600 seconds).
 
-## Technical Improvements (v1.3)
+## Technical Improvements (v1.5)
+- **Random Teleport System**: Added `/rtp` and `/随机传送` commands for random teleportation within current level
+- **Random Teleport Cooldown**: Default 15-second cooldown for regular players, admins and owners exempt
+- **Safe Position Checking**: Automatically finds safe teleport locations, avoids dangerous areas
+- **Unified Configuration Files**: All configuration files use `.dat` format with standardized naming
+- **Complete Biome Information Support**: All teleportation systems now record and display real biome information
+- **Warp Point Biome Storage**: Warp points automatically record current biome when created, display target biome when teleporting
+- **Back System Biome Recording**: Back command records real biome information from teleportation and death locations
+- **Position Query Biome Display**: GetPos command displays complete biome information for current position
+- **Owner Permission Support**: Server owners now have the same permissions as administrators
+- **Permission Utility Class**: Created unified permission checking utility class, simplified permission management
 - **Point-to-Point Teleport Response**: Support `/tpac playerName` and `/tpad playerName` for precise accept/deny of specific player requests
 - **Request Conflict Prevention**: Each target player can only have one pending request, preventing confusion from multiple simultaneous requests
 - **Code Cleanup**: Removed unused parameters from configuration files, optimized storage efficiency

@@ -4,6 +4,7 @@ import necesse.engine.commands.CommandLog;
 import necesse.engine.events.PreventableGameEvent;
 import necesse.engine.network.server.ServerClient;
 import tpamod.data.BackData;
+import necesse.level.maps.Level;
 
 public class TPARequestEvent extends PreventableGameEvent {
     public final ServerClient target;
@@ -28,10 +29,12 @@ public class TPARequestEvent extends PreventableGameEvent {
                 // 使用关卡标识符字符串作为关卡类型标识
                 String levelIdentifier = source.playerMob.getLevel().getIdentifier().toString();
                 int currentLevelType = getLevelTypeFromIdentifier(levelIdentifier);
+                // 获取当前群系标识符
+                String currentBiomeIdentifier = getCurrentBiomeIdentifier(source.playerMob.getLevel(), currentX, currentY);
                 
                 backData.recordTeleportPosition(String.valueOf(source.authentication),
                                               0, 0, currentLevelType,
-                                              (int)currentX, (int)currentY);
+                                              (int)currentX, (int)currentY, currentBiomeIdentifier);
             }
             
             source.playerMob.setPos(target.playerMob.getX(), target.playerMob.getY(), true);
@@ -59,6 +62,24 @@ public class TPARequestEvent extends PreventableGameEvent {
             System.out.println("TPA System: Failed to get level type from identifier: " + levelIdentifier);
             return 0; // 默认关卡
         }
+    }
+    
+    // 获取当前位置的群系标识符
+    private String getCurrentBiomeIdentifier(Level level, float x, float y) {
+        try {
+            // 将坐标转换为瓦片坐标
+            int tileX = (int)(x / 32.0F);
+            int tileY = (int)(y / 32.0F);
+            
+            // 获取该位置的群系
+            var biome = level.getBiome(tileX, tileY);
+            if (biome != null) {
+                return biome.getStringID();
+            }
+        } catch (Exception e) {
+            System.out.println("TPA System: Failed to get biome identifier: " + e.getMessage());
+        }
+        return "unknown"; // 如果获取失败，返回未知群系
     }
     
 }

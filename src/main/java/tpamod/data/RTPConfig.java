@@ -4,12 +4,12 @@ import necesse.engine.save.LoadData;
 import necesse.engine.save.SaveData;
 import java.io.File;
 
-public class BackConfig {
-    private int cooldownSeconds = 30;
+public class RTPConfig {
+    private int cooldownSeconds = 15;
     private File configFile;
 
-    public BackConfig() {
-        this.configFile = new File("config/tpamod/backconfig.dat");
+    public RTPConfig() {
+        this.configFile = new File("config/tpamod/rtpconfig.dat");
         loadConfig();
     }
 
@@ -29,12 +29,12 @@ public class BackConfig {
     // 保存配置到文件
     private void saveConfig() {
         try {
-            SaveData saveData = new SaveData("BackConfig");
+            SaveData saveData = new SaveData("RTPConfig");
             saveData.addInt("cooldownSeconds", cooldownSeconds);
             configFile.getParentFile().mkdirs(); // 确保目录存在
             saveData.saveScript(configFile);
         } catch (Exception e) {
-            System.out.println("Back System: Failed to save config: " + e.getMessage());
+            System.out.println("RTP System: Failed to save config: " + e.getMessage());
         }
     }
 
@@ -43,14 +43,14 @@ public class BackConfig {
         try {
             if (configFile.exists()) {
                 LoadData loadData = new LoadData(configFile);
-                int savedCooldown = loadData.getInt("cooldownSeconds", 30);
+                int savedCooldown = loadData.getInt("cooldownSeconds", 15);
                 if (savedCooldown >= 1 && savedCooldown <= 3600) {
                     this.cooldownSeconds = savedCooldown;
-                    System.out.println("Back System: Loaded cooldown time: " + savedCooldown + " seconds");
+                    System.out.println("RTP System: Loaded cooldown time: " + savedCooldown + " seconds");
                 }
             }
         } catch (Exception e) {
-            System.out.println("Back System: Using default cooldown time (30 seconds)");
+            System.out.println("RTP System: Using default cooldown time (15 seconds)");
         }
     }
 }

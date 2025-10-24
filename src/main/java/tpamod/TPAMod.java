@@ -13,11 +13,14 @@ import tpamod.commands.WarpListCommand;
 import tpamod.commands.WarpCDCommand;
 import tpamod.commands.BackCommand;
 import tpamod.commands.BackCDCommand;
+import tpamod.commands.RTPCommand;
+import tpamod.commands.RTPCDCommand;
 import tpamod.events.TPARequestEvent;
 import tpamod.events.TPAResponseEvent;
 import tpamod.listener.TPAListener;
 import tpamod.listener.WarpListener;
 import tpamod.listener.BackListener;
+import tpamod.listener.RTPListener;
 import tpamod.data.WarpData;
 import tpamod.data.WarpConfig;
 import tpamod.data.BackData;
@@ -51,6 +54,9 @@ public class TPAMod {
         BackData backData = new BackData();
         BackConfig backConfig = new BackConfig();
         BackListener backListener = new BackListener(backData);
+        
+        // 初始化随机传送系统
+        RTPListener rtpListener = new RTPListener();
         
         // 注册传送命令
         CommandsManager.registerServerCommand(new TPACommand("tpa", listener, backData));
@@ -90,6 +96,12 @@ public class TPAMod {
         CommandsManager.registerServerCommand(new BackCommand("返回", backData, backConfig, backListener));
         CommandsManager.registerServerCommand(new BackCDCommand("backcd", backConfig));
         CommandsManager.registerServerCommand(new BackCDCommand("设置返回冷却时间", backConfig));
+        
+        // 注册随机传送系统命令
+        CommandsManager.registerServerCommand(new RTPCommand("rtp", rtpListener, backData));
+        CommandsManager.registerServerCommand(new RTPCommand("随机传送", rtpListener, backData));
+        CommandsManager.registerServerCommand(new RTPCDCommand("rtpcd", rtpListener));
+        CommandsManager.registerServerCommand(new RTPCDCommand("设置随机传送冷却时间", rtpListener));
     }
 
     public void initResources() {

@@ -11,6 +11,7 @@ import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
 import necesse.engine.util.LevelIdentifier;
 import necesse.entity.mobs.PlayerMob;
+import tpamod.util.PermissionUtil;
 
 public class BackCommand extends ModularChatCommand {
     private final BackData backData;
@@ -28,7 +29,7 @@ public class BackCommand extends ModularChatCommand {
         String playerAuth = String.valueOf(serverClient.authentication);
         
         // 检查冷却时间（管理员不受冷却限制）
-        if (serverClient.getPermissionLevel() != PermissionLevel.ADMIN) {
+        if (!PermissionUtil.isAdminOrOwner(serverClient)) {
             long remainingCooldown = backListener.getRemainingCooldown(playerAuth);
             if (remainingCooldown > 0) {
                 logs.add("返回冷却中，剩余时间: " + (remainingCooldown / 1000) + "秒");
@@ -50,6 +51,7 @@ public class BackCommand extends ModularChatCommand {
             // 清除死亡记录
             backData.clearDeathRecord(playerAuth);
             logs.add("已返回上一次死亡位置");
+            logs.add("群系: " + playerData.lastDeathBiome);
             
         } else if (playerData.hasTeleportRecord) {
             // 返回传送坐标
@@ -60,6 +62,7 @@ public class BackCommand extends ModularChatCommand {
             // 清除传送记录
             backData.clearTeleportRecord(playerAuth);
             logs.add("已返回上一次传送前位置");
+            logs.add("群系: " + playerData.lastTeleportBiome);
             
         } else {
             logs.add("没有可返回的坐标记录");
@@ -67,7 +70,7 @@ public class BackCommand extends ModularChatCommand {
         }
         
         // 设置冷却时间（管理员不受冷却限制）
-        if (serverClient.getPermissionLevel() != PermissionLevel.ADMIN) {
+        if (!PermissionUtil.isAdminOrOwner(serverClient)) {
             backListener.setCooldown(playerAuth, backConfig.getCooldownSeconds());
         }
     }

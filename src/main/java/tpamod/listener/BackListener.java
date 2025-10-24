@@ -5,6 +5,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import necesse.engine.network.server.ServerClient;
 import necesse.entity.mobs.PlayerMob;
+import necesse.level.maps.Level;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,9 +32,11 @@ public class BackListener {
             int levelType = getLevelTypeFromIdentifier(levelIdentifier);
             int x = (int) playerMob.x;
             int y = (int) playerMob.y;
+            // 获取当前群系标识符
+            String biomeIdentifier = getCurrentBiomeIdentifier(playerMob.getLevel(), playerMob.x, playerMob.y);
             
-            backData.recordTeleportPosition(playerAuth, 0, 0, levelType, x, y);
-            System.out.println("Back System: Recorded teleport position for " + serverClient.getName());
+            backData.recordTeleportPosition(playerAuth, 0, 0, levelType, x, y, biomeIdentifier);
+            System.out.println("Back System: Recorded teleport position for " + serverClient.getName() + " in biome: " + biomeIdentifier);
         }
     }
 
@@ -49,9 +52,11 @@ public class BackListener {
             int levelType = getLevelTypeFromIdentifier(levelIdentifier);
             int x = (int) playerMob.x;
             int y = (int) playerMob.y;
+            // 获取当前群系标识符
+            String biomeIdentifier = getCurrentBiomeIdentifier(playerMob.getLevel(), playerMob.x, playerMob.y);
             
-            backData.recordDeathPosition(playerAuth, 0, 0, levelType, x, y);
-            System.out.println("Back System: Recorded death position for " + serverClient.getName());
+            backData.recordDeathPosition(playerAuth, 0, 0, levelType, x, y, biomeIdentifier);
+            System.out.println("Back System: Recorded death position for " + serverClient.getName() + " in biome: " + biomeIdentifier);
         }
     }
 
@@ -88,5 +93,23 @@ public class BackListener {
             System.out.println("Back System: Failed to get level type from identifier: " + levelIdentifier);
             return 0; // 默认关卡
         }
+    }
+    
+    // 获取当前位置的群系标识符
+    private String getCurrentBiomeIdentifier(Level level, float x, float y) {
+        try {
+            // 将坐标转换为瓦片坐标
+            int tileX = (int)(x / 32.0F);
+            int tileY = (int)(y / 32.0F);
+            
+            // 获取该位置的群系
+            var biome = level.getBiome(tileX, tileY);
+            if (biome != null) {
+                return biome.getStringID();
+            }
+        } catch (Exception e) {
+            System.out.println("Back System: Failed to get biome identifier: " + e.getMessage());
+        }
+        return "unknown"; // 如果获取失败，返回未知群系
     }
 }

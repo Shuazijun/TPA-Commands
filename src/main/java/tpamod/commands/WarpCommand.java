@@ -9,6 +9,8 @@ import necesse.engine.network.server.Server;
 import necesse.engine.network.server.ServerClient;
 import necesse.engine.util.LevelIdentifier;
 import necesse.entity.mobs.PlayerMob;
+import necesse.level.maps.Level;
+import tpamod.util.PermissionUtil;
 
 public class WarpCommand extends ModularChatCommand {
     private final WarpData warpData;
@@ -35,11 +37,12 @@ public class WarpCommand extends ModularChatCommand {
         }
         
         // 检查冷却时间（管理员不受冷却限制）
-        // 简化权限检查，假设所有玩家都受冷却限制
-        long remainingCooldown = warpListener.getRemainingCooldown(serverClient.authentication);
-        if (remainingCooldown > 0) {
-            logs.add("传送冷却中，剩余时间: " + (remainingCooldown / 1000) + "秒");
-            return;
+        if (!PermissionUtil.isAdminOrOwner(serverClient)) {
+            long remainingCooldown = warpListener.getRemainingCooldown(serverClient.authentication);
+            if (remainingCooldown > 0) {
+                logs.add("传送冷却中，剩余时间: " + (remainingCooldown / 1000) + "秒");
+                return;
+            }
         }
         
         // 获取传送点数据
@@ -61,12 +64,16 @@ public class WarpCommand extends ModularChatCommand {
             
             // 使用关卡标识符字符串作为关卡类型标识
             int levelType = Math.abs(currentLevelIdentifier.hashCode() % 1000);
+            // 获取当前群系标识符
+            String currentBiomeIdentifier = getCurrentBiomeIdentifier(playerMob.getLevel(), currentX, currentY);
             backData.recordTeleportPosition(String.valueOf(serverClient.authentication),
                                           0, 0, levelType,
-                                          (int)currentX, (int)currentY);
+                                          (int)currentX, (int)currentY, currentBiomeIdentifier);
             
-            // 设置冷却时间（所有玩家都受冷却限制）
-            warpListener.setCooldown(serverClient.authentication, warpConfig.getCooldownSeconds());
+            // 设置冷却时间（管理员不受冷却限制）
+            if (!PermissionUtil.isAdminOrOwner(serverClient)) {
+                warpListener.setCooldown(serverClient.authentication, warpConfig.getCooldownSeconds());
+            }
             
             // 检查是否需要切换关卡
             String currentLevelIdentifierString = playerMob.getLevel().getIdentifier().toString();
@@ -87,6 +94,7 @@ public class WarpCommand extends ModularChatCommand {
                     logs.add("已切换到关卡: " + warpPoint.levelIdentifier);
                     logs.add("已传送到传送点: " + warpName);
                     logs.add("坐标: (" + String.format("%.2f", warpPoint.x) + ", " + String.format("%.2f", warpPoint.y) + ")");
+                    logs.add("群系: " + warpPoint.biomeIdentifier);
                 } catch (Exception e) {
                     logs.add("关卡切换失败: " + e.getMessage());
                     logs.add("请稍后重试");
@@ -96,6 +104,7 @@ public class WarpCommand extends ModularChatCommand {
                 playerMob.setPos(warpPoint.x, warpPoint.y, true);
                 logs.add("已传送到传送点: " + warpName);
                 logs.add("坐标: (" + String.format("%.2f", warpPoint.x) + ", " + String.format("%.2f", warpPoint.y) + ") 关卡: " + warpPoint.levelIdentifier);
+                logs.add("群系: " + warpPoint.biomeIdentifier);
             }
         } else {
             logs.add("玩家数据错误，传送失败");
@@ -104,5 +113,23 @@ public class WarpCommand extends ModularChatCommand {
 
     public boolean shouldBeListed() {
         return true;
+    }
+    
+    // 获取当前位置的群系标识符
+    private String getCurrentBiomeIdentifier(Level level, float x, float y) {
+        try {
+            // 将坐标转换为瓦片坐标
+            int tileX = (int)(x / 32.0F);
+            int tileY = (int)(y / 32.0F);
+            
+            // 获取该位置的群系
+            var biome = level.getBiome(tileX, tileY);
+            if (biome != null) {
+                return biome.getStringID();
+            }
+        } catch (Exception e) {
+            System.out.println("Warp Command: Failed to get biome identifier: " + e.getMessage());
+        }
+        return "unknown"; // 如果获取失败，返回未知群系
     }
 }

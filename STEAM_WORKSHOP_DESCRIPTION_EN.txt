@@ -1,4 +1,4 @@
-TPA Commands Mod v1.3
+TPA Commands Mod v1.5
 
 A mod that adds TPA commands to the Necesse game.
 
@@ -24,12 +24,28 @@ Main Features:
 - /warplist - List all warp points
 - Chinese commands: /新建传送点, /删除传送点, /传送点, /传送点列表
 
+✅ Random Teleport System (New in v1.5)
+- /rtp - Random teleport to random position in current level (default 15s cooldown)
+- /rtpcd [seconds] - Set random teleport cooldown time (admin only)
+- Chinese commands: /随机传送, /设置随机传送冷却时间
+
 ✅ Position Query and Teleportation (Enhanced in v1.2)
 - /getpos [player name] - Get player position and level info (admins can query others)
 - /tppos [x] [y] [level identifier] - Teleport to specified coordinates and level (admin)
 - Chinese commands: /获取坐标, /传送坐标
 
-🚀 v1.3 New Features:
+🚀 v1.5 New Features:
+- Random teleport system: Added /rtp and /随机传送 commands
+- Same-level random teleportation: Players teleport randomly within current level
+- Safe position checking: Automatically finds safe teleport locations
+- Cooldown management: Default 15s cooldown for regular players, admins and owners exempt
+- Unified configuration files: All configuration files use .dat format with standardized naming
+- Complete biome information support: All teleportation systems record and display real biome information
+- Warp point biome storage: Automatically records current biome when creating warp points
+- Back system biome recording: Records real biome information from teleportation and death locations
+- Position query biome display: GetPos command displays complete biome information for current position
+- Owner permission support: Server owners now have the same permissions as administrators
+- Permission utility class: Unified permission checking tool, simplified permission management
 - Point-to-point teleport response: Support precise accept/deny of specific player requests
 - Request conflict prevention: Each target player can only have one pending request
 - Code cleanup: Removed unused parameters from configuration files
